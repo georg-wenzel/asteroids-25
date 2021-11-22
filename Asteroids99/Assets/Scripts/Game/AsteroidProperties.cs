@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Defines basic properties of an asteroid
+/// </summary>
 public class AsteroidProperties : MonoBehaviour
 {
     #region fields
