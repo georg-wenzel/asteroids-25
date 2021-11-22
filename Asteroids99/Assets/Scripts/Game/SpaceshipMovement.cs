@@ -2,9 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Script for controlling Spaceship Movement
+/// </summary>
 public class SpaceshipMovement : MonoBehaviour
 {
     #region fields
+    /// <summary>
+    /// The current velocity of the spaceship (in screen dimensions)
+    /// </summary>
+    private Vector2 velocity;
+    #endregion
+
+    #region properties
     /// <summary>
     /// A modifier for how fast the spaceship accelerates.
     /// </summary>
@@ -17,13 +27,7 @@ public class SpaceshipMovement : MonoBehaviour
     /// A modifier for how fast built velocity decays.
     /// </summary>
     public float speedDecay = 1.0f;
-
-    /// <summary>
-    /// The current velocity of the spaceship (in screen dimensions)
-    /// </summary>
-    private Vector2 velocity;
     #endregion
-
 
     #region methods
     void Start()
