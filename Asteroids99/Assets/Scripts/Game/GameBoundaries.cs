@@ -24,10 +24,17 @@ public class GameBoundaries : MonoBehaviour
     /// The right collider of the game
     /// </summary>
     public BoxCollider2D rightCollider;
-
+    /// <summary>
+    /// Size of the game space in the X dimension
+    /// </summary>
     public float GameSizeX { get; private set; }
+    /// <summary>
+    /// Size of the game space in the Y dimension
+    /// </summary>
     public float GameSizeY { get; private set; }
+    #endregion
 
+    #region methods
     public void Start()
     {
         //Calculate the size of the game space via the bounding boxes
