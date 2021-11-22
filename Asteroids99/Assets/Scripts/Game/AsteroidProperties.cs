@@ -7,13 +7,6 @@ using UnityEngine;
 /// </summary>
 public class AsteroidProperties : MonoBehaviour
 {
-    #region fields
-    /// <summary>
-    /// internal health of the asteroid
-    /// </summary>
-    private int health;
-    #endregion
-
     #region properties
     /// <summary>
     /// The scale of the asteroid (must be set before Start() is called)
@@ -32,8 +25,7 @@ public class AsteroidProperties : MonoBehaviour
     #region methods
     void Start()
     {
-        //set health and scale of the asteroid according to properties
-        health = InitialHealth;
+        //set scale of the asteroid according to properties
         transform.localScale = new Vector3(Scale, Scale, 1);
     }
     #endregion

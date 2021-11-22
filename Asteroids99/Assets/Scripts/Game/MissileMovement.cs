@@ -22,13 +22,22 @@ public class MissileMovement : MonoBehaviour
     void Start()
     {
         //Apply movement force in the direction the missile is facing.
-        GetComponent<Rigidbody2D>().AddForce(new Vector2(transform.up.x, transform.up.y) * 300 * Speed);
+        GetComponent<Rigidbody2D>().AddForce(new Vector2(transform.up.x, transform.up.y) * 0.02f * Speed);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         if(collision.Equals(bounds.bottomCollider) || collision.Equals(bounds.topCollider) || collision.Equals(bounds.leftCollider) ||
             collision.Equals(bounds.rightCollider))
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        //If colliding with asteroids, destroy this game object
+        if(collision.collider.gameObject.tag.Equals("Asteroid"))
         {
             Destroy(this.gameObject);
         }

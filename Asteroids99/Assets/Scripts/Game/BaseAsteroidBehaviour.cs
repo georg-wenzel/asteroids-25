@@ -19,6 +19,10 @@ public class BaseAsteroidBehaviour : MonoBehaviour
     /// The desired magnitude of velocity
     /// </summary>
     private float velocityMagnitude;
+    /// <summary>
+    /// internal health of the asteroid
+    /// </summary>
+    private int health;
     #endregion
 
     #region methods
@@ -37,6 +41,9 @@ public class BaseAsteroidBehaviour : MonoBehaviour
 
         //add a small random spin to the asteroid
         rigidbody2d.AddTorque(Random.Range(0.0f,1.0f));
+
+        //get initial health from properties
+        this.health = properties.InitialHealth;
         
     }
 
@@ -46,8 +53,19 @@ public class BaseAsteroidBehaviour : MonoBehaviour
         var magnitudeDiff = Mathf.Abs(velocityMagnitude - rigidbody2d.velocity.magnitude);
         if (magnitudeDiff > 0.001f)
             rigidbody2d.velocity = rigidbody2d.velocity.normalized * velocityMagnitude;
+    }
 
-        
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        //On collision with a missile
+        if(collision.collider.gameObject.tag.Equals("Missile"))
+        {
+            health--;
+            if (health == 0)
+            {
+                Destroy(this.gameObject);
+            }
+        }
     }
     #endregion
 }
