@@ -5,6 +5,15 @@ using UnityEngine.Audio;
 
 public class Settings : MonoBehaviour
 {
+    #region video
+
+    public void SetFullScreen(bool isFullscreen)
+    {
+        Screen.fullScreen = isFullscreen;
+    }
+
+    #endregion
+
     #region audio
 
     public AudioMixer audioMixer;
