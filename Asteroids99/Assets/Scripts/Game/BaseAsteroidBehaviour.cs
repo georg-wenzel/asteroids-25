@@ -32,8 +32,14 @@ public class BaseAsteroidBehaviour : MonoBehaviour
         rigidbody2d = GetComponent<Rigidbody2D>();
         properties = GetComponent<AsteroidProperties>();
 
-        //define a random movement vector this asteroid travels in
-        Vector2 direction = new Vector2(Random.Range(0.0f, 10.0f), Random.Range(0.0f, 10.0f)).normalized;
+        Vector2 direction;
+        //if no direction is given in the properties
+        if (properties.InitialMovementDirection.magnitude > 0)
+            //use this vector
+            direction = properties.InitialMovementDirection.normalized;
+        else
+            //define a random movement vector this asteroid travels in
+            direction = new Vector2(Random.Range(0.0f, 10.0f), Random.Range(0.0f, 10.0f)).normalized;
 
         //add the initial force and store the desired magnitude of velocity
         rigidbody2d.AddForce(direction * properties.Speed, ForceMode2D.Impulse);

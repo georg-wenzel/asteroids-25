@@ -20,6 +20,10 @@ public class AsteroidProperties : MonoBehaviour
     /// The initial health of the asteroid (must be set before Start() is called)
     /// </summary>
     public int InitialHealth = 1;
+    /// <summary>
+    /// The initial direction this Asteroid travels in. If 0/0, it is randomly chosen.
+    /// </summary>
+    public Vector2 InitialMovementDirection;
     #endregion
 
     #region methods

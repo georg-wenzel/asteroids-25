@@ -7,15 +7,18 @@ using UnityEngine;
 /// </summary>
 public class MissileMovement : MonoBehaviour
 {
+    #region fields
+    /// <summary>
+    /// The boundaries of the game
+    /// </summary>
+    private GameBoundaries bounds;
+    #endregion
+
     #region properties 
     /// <summary>
     /// The travel speed of the missile (Must be set before Start() is called)
     /// </summary>
     public float Speed = 1.0f;
-    /// <summary>
-    /// The boundaries of the game
-    /// </summary>
-    public GameBoundaries bounds;
     #endregion
 
     #region methods
@@ -23,6 +26,8 @@ public class MissileMovement : MonoBehaviour
     {
         //Apply movement force in the direction the missile is facing.
         GetComponent<Rigidbody2D>().AddForce(new Vector2(transform.up.x, transform.up.y) * 0.02f * Speed);
+
+        bounds = GameObject.Find("GameView").GetComponent<GameBoundaries>();
     }
 
     private void OnTriggerExit2D(Collider2D collision)

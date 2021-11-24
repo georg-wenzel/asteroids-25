@@ -12,19 +12,19 @@ public class BoundaryTeleport : MonoBehaviour
     /// The collider of the object
     /// </summary>
     private Collider2D ownCollider;
-    #endregion
-
-    #region properties
     /// <summary>
     /// The boundaries of the game.
     /// </summary>
-    public GameBoundaries bounds;
+    private GameBoundaries bounds;
     #endregion
 
     public void Start()
     {
         //get the attached 2d collider
         ownCollider = this.GetComponent<Collider2D>();
+
+        //inject game boundaries
+        bounds = GameObject.Find("GameView").GetComponent<GameBoundaries>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

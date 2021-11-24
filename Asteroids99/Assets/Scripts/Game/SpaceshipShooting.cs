@@ -42,8 +42,6 @@ public class SpaceshipShooting : MonoBehaviour
     {
         //Instantiate new missile
         var go = Instantiate(Missile, this.transform.position + this.transform.up.normalized * 0.01f, this.transform.rotation);
-        //Make sure it uses the same game bounds as the spaceship
-        go.GetComponent<MissileMovement>().bounds = this.GetComponent<BoundaryTeleport>().bounds;
     }
     #endregion
 }
