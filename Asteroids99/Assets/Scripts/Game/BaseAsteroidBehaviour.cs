@@ -46,7 +46,7 @@ public class BaseAsteroidBehaviour : MonoBehaviour
         velocityMagnitude = rigidbody2d.velocity.magnitude;
 
         //add a small random spin to the asteroid
-        rigidbody2d.AddTorque(Random.Range(0.0f,1.0f));
+        rigidbody2d.AddTorque(Random.Range(0.0f,5.0f));
 
         //get initial health from properties
         this.health = properties.InitialHealth;

@@ -24,8 +24,8 @@ public class SpaceshipShooting : MonoBehaviour
     #region methods
     void Update()
     {
-        //Fire on spacebar press if 0.2 or more seconds have passed since the last shot
-        if(Input.GetKeyDown(KeyCode.Space))
+        //Fire on spacebar press/hold if 0.2 or more seconds have passed since the last shot
+        if(Input.GetKey(KeyCode.Space))
         {
             if(cooldown <= 0.0f)
             {

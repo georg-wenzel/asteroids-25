@@ -39,8 +39,8 @@ public class SpaceshipMovement : MonoBehaviour
     void Update()
     {
         //each frame, the velocity decays by a static amount, and if the decay changes the sign of the dimension, that dimension's velocity changes to 0.
-        float decreaseX = -0.0015f * Mathf.Sign(velocity.x);
-        float decreaseY = -0.0015f * Mathf.Sign(velocity.y);
+        float decreaseX = -0.01f * Mathf.Sign(velocity.x);
+        float decreaseY = -0.01f * Mathf.Sign(velocity.y);
         Vector2 new_velocity = this.velocity + new Vector2(decreaseX, decreaseY) * Time.deltaTime;
         velocity = new Vector2((new_velocity.x * velocity.x > 0) ? new_velocity.x : 0,
                                 (new_velocity.y * velocity.y > 0) ? new_velocity.y : 0);
@@ -50,25 +50,25 @@ public class SpaceshipMovement : MonoBehaviour
         Vector2 movementVector = new Vector2(0, 0);
         float rotationDegrees = 0;
 
-        if(Input.GetKey(KeyCode.UpArrow))
+        if(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
         {
             movementVector += new Vector2(transform.up.x, transform.up.y);
         }
-        if(Input.GetKey(KeyCode.DownArrow))
+        if(Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
         {
             movementVector -= new Vector2(transform.up.x, transform.up.y);
         }
-        if(Input.GetKey(KeyCode.RightArrow))
+        if(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
             rotationDegrees -= 0.2f;
         }
-        if(Input.GetKey(KeyCode.LeftArrow))
+        if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
             rotationDegrees += 0.2f;
         }
 
         //update the velocity, clamping it to a maximum magnitude (max speed is the same in multiple dimensions as in one)
-        this.velocity = Vector2.ClampMagnitude(this.velocity + movementVector * Time.deltaTime * 0.004f * translationSpeed, 0.005f);
+        this.velocity = Vector2.ClampMagnitude(this.velocity + movementVector * Time.deltaTime * 0.04f * translationSpeed, 0.035f);
         //apply this frame's rotation and translation.
         transform.Rotate(new Vector3(0, 0, rotationDegrees * rotationSpeed));
         transform.Translate(velocity, Space.World);

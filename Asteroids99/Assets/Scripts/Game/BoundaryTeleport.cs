@@ -16,7 +16,20 @@ public class BoundaryTeleport : MonoBehaviour
     /// The boundaries of the game.
     /// </summary>
     private GameBoundaries bounds;
+    /// <summary>
+    /// Whether or not this object has had contact before.
+    /// </summary>
+    private bool firstContact = true;
     #endregion
+
+    #region properties
+    /// <summary>
+    /// If set to true, ignores the first collision
+    /// </summary>
+    public bool IgnoreFirstContact = false;
+    #endregion
+
+    #region methods
 
     public void Start()
     {
@@ -29,26 +42,49 @@ public class BoundaryTeleport : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (IgnoreFirstContact && firstContact)
+        {
+            firstContact = false;
+            return;
+        }
+
         //we have to calculate the current size of the collider in the frame of the collision, because it changes with varying orientation of the object
         //Give 10% leeway to own size to avoid triggering a collision on the other side after movement
-        var ownSizeX = ownCollider.bounds.extents.x * 2 * 1.1f;
-        var ownSizeY = ownCollider.bounds.extents.y * 2 * 1.1f;
+        var ownSizeX = ownCollider.bounds.extents.x * 1.10f;
+        var ownSizeY = ownCollider.bounds.extents.y * 1.10f;
 
         if (collision.Equals(bounds.topCollider))
         {
-            this.transform.Translate(new Vector3(0, - bounds.GameSizeY + ownSizeY, 0), Space.World);
+            this.transform.SetPositionAndRotation(new Vector3(
+                this.transform.position.x,
+                bounds.bottomCollider.bounds.center.y + bounds.bottomCollider.bounds.extents.y + 0.001f + ownSizeY,
+                this.transform.position.z),
+                this.transform.rotation);
         }
         else if (collision.Equals(bounds.bottomCollider))
         {
-            this.transform.Translate(new Vector3(0, bounds.GameSizeY - ownSizeY, 0), Space.World);
+            this.transform.SetPositionAndRotation(new Vector3(
+                this.transform.position.x,
+               bounds.topCollider.bounds.center.y - bounds.topCollider.bounds.extents.y - 0.001f - ownSizeY,
+               this.transform.position.z),
+               this.transform.rotation);
         }
         else if (collision.Equals(bounds.leftCollider))
         {
-            this.transform.Translate(new Vector3(bounds.GameSizeX - ownSizeX, 0, 0), Space.World);
+            this.transform.SetPositionAndRotation(new Vector3(
+                bounds.rightCollider.bounds.center.x - bounds.rightCollider.bounds.extents.x - 0.001f - ownSizeX,
+                this.transform.position.y,
+                this.transform.position.z),
+                this.transform.rotation);
         }
         else if (collision.Equals(bounds.rightCollider))
         {
-            this.transform.Translate(new Vector3(- bounds.GameSizeX + ownSizeX, 0, 0), Space.World);
+            this.transform.SetPositionAndRotation(new Vector3(
+                bounds.leftCollider.bounds.center.x + bounds.leftCollider.bounds.extents.x + 0.001f + ownSizeX,
+                this.transform.position.y,
+                this.transform.position.z),
+                this.transform.rotation);
         }
     }
+    #endregion
 }

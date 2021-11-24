@@ -25,7 +25,7 @@ public class MissileMovement : MonoBehaviour
     void Start()
     {
         //Apply movement force in the direction the missile is facing.
-        GetComponent<Rigidbody2D>().AddForce(new Vector2(transform.up.x, transform.up.y) * 0.02f * Speed);
+        GetComponent<Rigidbody2D>().AddForce(new Vector2(transform.up.x, transform.up.y) * 0.3f * Speed);
 
         bounds = GameObject.Find("GameView").GetComponent<GameBoundaries>();
     }
