@@ -373,7 +373,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.23623441, g: 0.4745098, b: 0.19215688, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -608,6 +608,7 @@ GameObject:
   - component: {fileID: 1339204078}
   - component: {fileID: 1339204076}
   - component: {fileID: 1339204077}
+  - component: {fileID: 1339204079}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -633,15 +634,16 @@ MonoBehaviour:
   autoStartServerBuild: 1
   serverTickRate: 30
   offlineScene: Assets/Scenes/Offline.unity
-  onlineScene: Assets/Scenes/Online.unity
+  onlineScene: Assets/Scenes/Lobby.unity
   transport: {fileID: 1339204077}
   networkAddress: localhost
-  maxConnections: 130
+  maxConnections: 30
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 5700995894699322678, guid: eae7c77c49c3978669e914bd827308b6, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 6190380609171784527, guid: 18f3d864fa9bcf831b2a8f38048e5a3f, type: 3}
 --- !u!114 &1339204077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654,7 +656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0110f245bfcfc7d459681f7bd9ebc590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  port: 7778
+  port: 7777
   maxMessageSize: 16384
   handshakeMaxSize: 3000
   noDelay: 1
@@ -683,6 +685,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1339204079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339204075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d09f5c8bf2f4747b7a9284ef5d9ce2a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1430445757
 GameObject:
   m_ObjectHideFlags: 0

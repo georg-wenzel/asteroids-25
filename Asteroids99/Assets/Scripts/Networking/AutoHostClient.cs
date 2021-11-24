@@ -6,10 +6,10 @@ public class AutoHostClient : MonoBehaviour
 {
     [SerializeField] NetworkManager networkManager;
     void Start(){
-        // headless build
         if(!Application.isBatchMode){
             Debug.Log($"Client Build");
-            networkManager.StartClient();
+            Debug.Log($"NetworkAdress: {networkManager.networkAddress}");
+            //networkManager.StartHost();
         } else {
             Debug.Log($"Server Starting");
         }
