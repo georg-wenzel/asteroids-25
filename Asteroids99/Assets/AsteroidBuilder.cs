@@ -15,7 +15,8 @@ public class AsteroidBuilder : MonoBehaviour
     private int initialHealth;
     private int initialScale;
     private int initialSpeed;
-    private Vector3 initialSpawn;
+    private Vector2 initialSpawn;
+    private Vector2 targetDirection;
     #endregion
 
     #region properties
@@ -23,6 +24,11 @@ public class AsteroidBuilder : MonoBehaviour
     /// A base Asteroid
     /// </summary>
     public GameObject AsteroidPrefab;
+
+    /// <summary>
+    /// The Game Boundaries
+    /// </summary>
+    public GameBoundaries GameView;
     #endregion
 
     #region methods
@@ -40,7 +46,35 @@ public class AsteroidBuilder : MonoBehaviour
         initialHealth = 1;
         initialScale = 1;
         initialSpeed = 1;
-        initialSpawn = new Vector3(0, 0, 0);
+        initialSpawn = new Vector2(0,0);
+
+        //==================== SPAWN THE METEOR OUTSIDE THE ARENA, TOWARDS A TARGET POINT INSIDE OF IT ====================
+        //this implementation >should< be relatively robust to resizing of the GameView.
+
+        //Define a random target point in the game field.
+        float boundLeft = GameView.leftCollider.bounds.center.x + GameView.leftCollider.bounds.extents.x;
+        float boundRight = GameView.rightCollider.bounds.center.x - GameView.rightCollider.bounds.extents.x;
+        float boundTop = GameView.topCollider.bounds.center.y - GameView.topCollider.bounds.extents.y;
+        float boundBottom = GameView.leftCollider.bounds.center.y + GameView.bottomCollider.bounds.extents.y;
+        Vector2 targetPoint = new Vector2(Random.Range(boundLeft, boundRight), Random.Range(boundBottom, boundTop));
+
+        //Spawn the meteor outside the arena at random
+        int randx = Random.Range(0, 3);
+        int randy = Random.Range(0, 3);
+        //prevent 0/0 spawn
+        if (randx + randy == 0) randx = Random.Range(1, 3);
+        
+        if(randx == 1)
+            initialSpawn.x = boundLeft - GameView.GameSizeX / 2;
+        else if(randx == 2)
+            initialSpawn.x = boundRight + GameView.GameSizeX / 2;
+        if(randy == 1)
+            initialSpawn.y = boundBottom - GameView.GameSizeY / 2;
+        else if(randy == 2)
+            initialSpawn.y = boundTop + GameView.GameSizeY / 2;
+
+        //point the velocity vector towards the target point (inside the arena)
+        targetDirection = (targetPoint - initialSpawn).normalized;
     }
 
     /// <summary>
@@ -54,6 +88,7 @@ public class AsteroidBuilder : MonoBehaviour
         props.InitialHealth = this.initialHealth;
         props.Scale = this.initialScale;
         props.Speed = this.initialSpeed;
+        props.InitialMovementDirection = this.targetDirection;
     }
 
     /// <summary>

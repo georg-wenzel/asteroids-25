@@ -237,6 +237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AsteroidPrefab: {fileID: 5337574390950848166, guid: df6a4f3d22e42a1459172f8fbec350cf, type: 3}
+  GameView: {fileID: 1143015357}
 --- !u!4 &1010202289
 Transform:
   m_ObjectHideFlags: 0
