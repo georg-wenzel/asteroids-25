@@ -18,7 +18,7 @@ public class MainMenu : MonoBehaviour
     public void PlayMultiPlayer()
     {
         // Load some Scene
-        // SceneManager.LoadScene("SomeSceneName");
+        SceneManager.LoadScene("MultiplayerConnect");
     }
 
     public void QuitGame()
