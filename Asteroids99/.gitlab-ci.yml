@@ -129,7 +129,8 @@ build-StandaloneLinux64:
   <<: *build
   variables:
     BUILD_TARGET: StandaloneLinux64
-
+  only:
+   - master
 #build-StandaloneLinux64-il2cpp:
 #  <<: *build
 #  image: $IMAGE:$UNITY_VERSION-linux-il2cpp-$IMAGE_VERSION
@@ -165,6 +166,8 @@ build-WebGL:
     - apt-get update && apt-get install ffmpeg -y
   variables:
     BUILD_TARGET: WebGL
+  only:
+   - master  
 
 #build-android:
 #  <<: *build
