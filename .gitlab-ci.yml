@@ -1,8 +1,6 @@
 stages:
   - build_and_test
   - deploy
-  only:
-   - master  
 
 # If you are looking for a place where to add 'UNITY_LICENSE_FILE' and other secrets, please visit your project's gitlab page:
 # settings > CI/CD > Variables instead
@@ -12,7 +10,7 @@ variables:
   UNITY_VERSION: "2020.3.22f1"
   IMAGE: unityci/editor # https://hub.docker.com/r/unityci/editor
   IMAGE_VERSION: "0.15" # https://github.com/game-ci/docker/releases
-  UNITY_DIR: $CI_PROJECT_DIR # this needs to be an absolute path. Defaults to the root of your tree.
+  UNITY_DIR: $CI_PROJECT_DIR/Asteroids99 # this needs to be an absolute path. Defaults to the root of your tree.
 
 
 image: $IMAGE:$UNITY_VERSION-base-$IMAGE_VERSION
@@ -62,23 +60,20 @@ get-activation-file:
     expire_in: 2 weeks
   # https://gitlab.com/gableroux/unity3d-gitlab-ci-example/-/issues/83
   # you may need to remove or replace these to fit your need if you are using your own runners
-  tags:
-    - gitlab-org
+  #tags:
+  #  - gitlab-org
   coverage: /<Linecoverage>(.*?)</Linecoverage>/
-  only:
-   - master
+
 test-playmode:
   <<: *test
   variables:
     TEST_PLATFORM: playmode
-  only:
-   - master
+
 test-editmode:
   <<: *test
   variables:
     TEST_PLATFORM: editmode
-  only:
-   - master
+
 # uncomment the following blocks if you'd like to have junit reporting unity test results in gitlab
 # We currently have the following issue which prevents it from working right now, but you can give
 # a hand if you're interested in this feature:
@@ -127,17 +122,16 @@ test-editmode:
       - $UNITY_DIR/Builds/
   # https://gitlab.com/gableroux/unity3d-gitlab-ci-example/-/issues/83
   # you may need to remove or replace these to fit your need if you are using your own runners
-  tags:
-    - gitlab-org
-  only:
-   - master   
+  #tags:
+  #  - gitlab-org
 
 build-StandaloneLinux64:
   <<: *build
   variables:
     BUILD_TARGET: StandaloneLinux64
-  only:
-   - master
+    BuildOptions: EnableHeadlessMode
+
+
 #build-StandaloneLinux64-il2cpp:
 #  <<: *build
 #  image: $IMAGE:$UNITY_VERSION-linux-il2cpp-$IMAGE_VERSION
@@ -173,8 +167,7 @@ build-WebGL:
     - apt-get update && apt-get install ffmpeg -y
   variables:
     BUILD_TARGET: WebGL
-  only:
-   - master  
+
 
 #build-android:
 #  <<: *build
@@ -230,7 +223,7 @@ pages:
     paths:
       - public
   only:
-   - master
+      - master
 
 workflow:
   rules:
