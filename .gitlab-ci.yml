@@ -1,8 +1,7 @@
 stages:
   - build_and_test
   - deploy
-  only:
-      - master
+
 # If you are looking for a place where to add 'UNITY_LICENSE_FILE' and other secrets, please visit your project's gitlab page:
 # settings > CI/CD > Variables instead
 variables:
@@ -69,14 +68,12 @@ test-playmode:
   <<: *test
   variables:
     TEST_PLATFORM: playmode
-  only:
-      - master
+
 test-editmode:
   <<: *test
   variables:
     TEST_PLATFORM: editmode
-  only:
-      - master
+
 # uncomment the following blocks if you'd like to have junit reporting unity test results in gitlab
 # We currently have the following issue which prevents it from working right now, but you can give
 # a hand if you're interested in this feature:
@@ -133,8 +130,6 @@ build-StandaloneLinux64:
   variables:
     BUILD_TARGET: StandaloneLinux64
     BuildOptions: EnableHeadlessMode
-  only:
-      - master
 
 #build-StandaloneLinux64-il2cpp:
 #  <<: *build
@@ -171,8 +166,7 @@ build-WebGL:
     - apt-get update && apt-get install ffmpeg -y
   variables:
     BUILD_TARGET: WebGL
-  only:
-      - master
+
 
 #build-android:
 #  <<: *build
