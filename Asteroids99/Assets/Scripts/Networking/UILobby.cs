@@ -15,6 +15,8 @@ namespace Networking{
         [SerializeField] Button joinButton;
         [SerializeField] Button hostButton;
 
+        [SerializeField] Button backButton;
+
         [SerializeField] GameObject hostJoin;
         [SerializeField] Canvas lobbyCanvas;
 
@@ -22,8 +24,12 @@ namespace Networking{
         [SerializeField] Transform UIPlayerParent;
         [SerializeField] GameObject UIPlayerPrefab;
 
+
         [SerializeField] TMP_Text matchIDText;
-        [SerializeField] GameObject startGameButton;
+        [SerializeField]  public GameObject startGameButton;
+
+        GameObject localPlayerLobbyUI;
+
 
         public void Host()
         {
@@ -35,6 +41,16 @@ namespace Networking{
         {
             Player.localPlayer.JoinGame(joinMatchInput.text);
         }
+        public void SetStartButtonActive (bool active) {
+            startGameButton.SetActive (active);
+        }
+        public void DisconnectGame () {
+            if (localPlayerLobbyUI != null) Destroy (localPlayerLobbyUI);
+            Player.localPlayer.DisconnectGame ();
+
+            lobbyCanvas.enabled = false;
+        }
+
         public void JoinSuccess(bool success, string matchID)
         {
             if(!success)
@@ -43,19 +59,20 @@ namespace Networking{
             } else {
                 hostJoin.SetActive(false);
                 lobbyCanvas.enabled = true;
-                SpawnPlayerUIPrefab(Player.localPlayer);
+                if (localPlayerLobbyUI != null) Destroy (localPlayerLobbyUI);
+                localPlayerLobbyUI = SpawnPlayerUIPrefab (Player.localPlayer);
                 matchIDText.text = matchID;
+                startGameButton.SetActive(false);
             }
-
         }
-
         public void HostSuccess(bool success, string matchID){
             if(!success){
                 hostJoin.SetActive(true);
             } else {
                 hostJoin.SetActive(false);
                 lobbyCanvas.enabled = true;
-                SpawnPlayerUIPrefab(Player.localPlayer);
+                if (localPlayerLobbyUI != null) Destroy (localPlayerLobbyUI);
+                localPlayerLobbyUI = SpawnPlayerUIPrefab (Player.localPlayer);
                 matchIDText.text = matchID;
                 startGameButton.SetActive(true);
             }
@@ -80,9 +97,11 @@ namespace Networking{
 
         }
 
-        public void SpawnPlayerUIPrefab(Player player) {
+        public GameObject SpawnPlayerUIPrefab(Player player) {
             GameObject newUIPlayer = Instantiate(UIPlayerPrefab, UIPlayerParent);
             newUIPlayer.GetComponent<UIPlayer>().SetPlayer(player);
+            newUIPlayer.transform.SetSiblingIndex(player.playerIndex - 1);
+            return newUIPlayer;
         }
 
         public void BeginGame() {
