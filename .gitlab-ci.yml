@@ -220,7 +220,7 @@ pages:
       - public
   only:
       - master
-
+      
 workflow:
   rules:
     - if: $CI_COMMIT_BRANCH == "develop" || $CI_COMMIT_BRANCH == "master" 
