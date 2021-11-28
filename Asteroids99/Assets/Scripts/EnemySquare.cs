@@ -21,18 +21,18 @@ public class EnemySquare : MonoBehaviour
     void Start()
     {
         gameOverUI.SetActive(false);
-        // set playerName, starting Score and HP
     }
 
-    void UpdateUIOnChanges()
+    public void UpdateUI(GameState gameState)
     {
-        // if (!player.isDead())
-        // { 
-        //     getPlayerData();
-        //     updateUI();
-        //     if (player.isDead())
-        //         gameOverUI.SetActive(true);
-        // }
+        if(!gameState.GameOver){
+            playerHP.SetText(gameState.HP.ToString());
+            playerScore.SetText(gameState.Score.ToString());
+        }
+        else if(gameState.GameOver)
+        {
+            gameOverUI.SetActive(true);
+        }
     }
 
     #endregion
