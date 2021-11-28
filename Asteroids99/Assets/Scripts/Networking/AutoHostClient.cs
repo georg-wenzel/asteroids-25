@@ -20,7 +20,8 @@ public class AutoHostClient : MonoBehaviour
     
     public void JoinLocal()
     {
-        networkManager.networkAddress = "localhost";
+        Debug.Log($"Joining on {networkManager.networkAddress}");
+
         networkManager.StartClient();
     }
 }
