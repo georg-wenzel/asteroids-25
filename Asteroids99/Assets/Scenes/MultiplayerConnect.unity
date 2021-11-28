@@ -1181,8 +1181,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1339204078}
   - component: {fileID: 1339204076}
-  - component: {fileID: 1339204077}
   - component: {fileID: 1339204079}
+  - component: {fileID: 1339204077}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -1207,10 +1207,10 @@ MonoBehaviour:
   runInBackground: 1
   autoStartServerBuild: 1
   serverTickRate: 30
-  offlineScene: Assets/Scenes/MainMenu.unity
+  offlineScene: Assets/Scenes/MultiplayerConnect.unity
   onlineScene: Assets/Scenes/Lobby.unity
   transport: {fileID: 1339204077}
-  networkAddress: localhost
+  networkAddress: 3.120.134.250
   maxConnections: 30
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 5700995894699322678, guid: eae7c77c49c3978669e914bd827308b6, type: 3}
@@ -1227,24 +1227,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 1339204075}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0110f245bfcfc7d459681f7bd9ebc590, type: 3}
+  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  port: 7777
-  maxMessageSize: 16384
-  handshakeMaxSize: 3000
-  noDelay: 1
-  sendTimeout: 5000
-  receiveTimeout: 20000
-  serverMaxMessagesPerTick: 10000
-  clientMaxMessagesPerTick: 1000
-  batchSend: 1
-  waitBeforeSend: 0
-  clientUseWss: 0
-  sslEnabled: 0
-  sslCertJson: ./cert.json
-  sslProtocols: 3072
-  _logLevels: 0
+  Port: 7777
+  DualMode: 1
+  NoDelay: 1
+  Interval: 10
+  Timeout: 10000
+  FastResend: 2
+  CongestionWindow: 0
+  SendWindowSize: 4096
+  ReceiveWindowSize: 4096
+  NonAlloc: 1
+  debugLog: 1
+  statisticsGUI: 0
+  statisticsLog: 0
 --- !u!4 &1339204078
 Transform:
   m_ObjectHideFlags: 0
