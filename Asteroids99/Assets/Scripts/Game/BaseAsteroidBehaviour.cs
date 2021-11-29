@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Defines the default behaviour for an asteroid
 /// </summary>
-public class BaseAsteroidBehaviour : MonoBehaviour
+public class BaseAsteroidBehaviour : MonoBehaviour, IAsteroidDeathObservable
 {
     #region fields
     /// The corresponding asteroid properties of the GameObject
@@ -27,9 +27,16 @@ public class BaseAsteroidBehaviour : MonoBehaviour
     /// The bounds of the playing field
     /// </summary>
     private GameBoundaries bounds;
+    //all observers of this asteroid's death
+    private HashSet<IAsteroidDeathObserver> observers;
     #endregion
 
     #region methods
+    public void Awake()
+    {
+        observers = new HashSet<IAsteroidDeathObserver>();
+    }
+
     public void Start()
     {
         //get components of this game object
@@ -95,6 +102,40 @@ public class BaseAsteroidBehaviour : MonoBehaviour
 
             //Change velocity towards this point
             rigidbody2d.velocity = (targetPoint - rigidbody2d.position).normalized * velocityMagnitude;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        notifyAll();
+    }
+
+    /// <summary>
+    /// Register a death observer
+    /// </summary>
+    /// <param name="observer">The observer to add</param>
+    public void register(IAsteroidDeathObserver observer)
+    {
+        observers.Add(observer);
+    }
+
+    /// <summary>
+    /// Unregister a death observer
+    /// </summary>
+    /// <param name="observer">The observer to remove</param>
+    public void unregister(IAsteroidDeathObserver observer)
+    {
+        observers.Remove(observer);
+    }
+
+    /// <summary>
+    /// Notify all observers about this asteroid's death
+    /// </summary>
+    public void notifyAll()
+    {
+        foreach(IAsteroidDeathObserver o in observers)
+        {
+            o.NotifyDeath(this.gameObject);
         }
     }
     #endregion

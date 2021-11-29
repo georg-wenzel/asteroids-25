@@ -80,9 +80,9 @@ public class AsteroidBuilder : MonoBehaviour
 
     /// <summary>
     /// Build and spawn the created Asteroid
+    /// <returns>The instantiated game object</returns>
     /// </summary>
-    /// <param name="startPosition">The starting position of the Asteroid</param>
-    public void Spawn()
+    public GameObject Spawn()
     {
         GameObject go = Instantiate(AsteroidPrefab, initialSpawn, new Quaternion());
         var props = go.GetComponent<AsteroidProperties>();
@@ -90,6 +90,7 @@ public class AsteroidBuilder : MonoBehaviour
         props.Scale = this.initialScale;
         props.Speed = this.initialSpeed;
         props.InitialMovementDirection = this.targetDirection;
+        return go;
     }
 
     /// <summary>
