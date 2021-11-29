@@ -11,23 +11,27 @@ public class GameBoundaries : MonoBehaviour
     /// <summary>
     /// The top collider of the game
     /// </summary>
-    public BoxCollider2D topCollider;
+    public Collider2D topCollider;
     /// <summary>
     /// The bottom collider of the game
     /// </summary>
-    public BoxCollider2D bottomCollider;
+    public Collider2D bottomCollider;
     /// <summary>
     /// The left collider of the game
     /// </summary>
-    public BoxCollider2D leftCollider;
+    public Collider2D leftCollider;
     /// <summary>
     /// The right collider of the game
     /// </summary>
-    public BoxCollider2D rightCollider;
+    public Collider2D rightCollider;
     /// <summary>
     /// The Game Space
     /// </summary>
-    public BoxCollider2D GameSpace;
+    public Collider2D GameSpace;
+    /// <summary>
+    /// The very outer bounds of where anything should be
+    /// </summary>
+    public Collider2D OuterBounds;
     /// <summary>
     /// Size of the game space in the X dimension
     /// </summary>

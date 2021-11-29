@@ -278,6 +278,7 @@ GameObject:
   - component: {fileID: 1143015359}
   - component: {fileID: 1143015358}
   - component: {fileID: 1143015363}
+  - component: {fileID: 1143015364}
   - component: {fileID: 1143015357}
   m_Layer: 0
   m_Name: GameView
@@ -303,6 +304,7 @@ MonoBehaviour:
   leftCollider: {fileID: 1143015361}
   rightCollider: {fileID: 1143015360}
   GameSpace: {fileID: 1143015363}
+  OuterBounds: {fileID: 1143015364}
 --- !u!61 &1143015358
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -448,6 +450,31 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 100, y: 100}
   m_EdgeRadius: 0
+--- !u!68 &1143015364
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1143015356}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: 100, y: 100}
+  - {x: 100, y: -100}
+  - {x: -100, y: -100}
+  - {x: -100, y: 100}
+  - {x: 100, y: 100}
+  m_AdjacentStartPoint: {x: 0, y: 0}
+  m_AdjacentEndPoint: {x: 0, y: 0}
+  m_UseAdjacentStartPoint: 0
+  m_UseAdjacentEndPoint: 0
 --- !u!1 &1280522079
 GameObject:
   m_ObjectHideFlags: 0

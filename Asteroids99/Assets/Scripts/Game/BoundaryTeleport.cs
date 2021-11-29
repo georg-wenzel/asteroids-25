@@ -113,11 +113,6 @@ public class BoundaryTeleport : MonoBehaviour
                     transform.position.z),
                     transform.rotation);
         }
-
-        //These are general sanity checks - when an asteroid leaves any side triggers, its center should be inside the game space in at least
-        //one coordinate - otherwise, the asteroid has escaped (e.g. through collision with other asteroids)
-        //in this case we should reset it 
-        //TODO: Sanity checks
     }
     #endregion
 }

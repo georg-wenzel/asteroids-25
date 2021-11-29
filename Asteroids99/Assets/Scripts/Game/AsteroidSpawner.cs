@@ -18,13 +18,12 @@ public class AsteroidSpawner : MonoBehaviour
     AsteroidBuilder builder;
     #endregion
 
-    // Start is called before the first frame update
+    #region methods
     void Start()
     {
         builder = GetComponent<AsteroidBuilder>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         time_since_last_asteroid += Time.deltaTime;
@@ -37,4 +36,5 @@ public class AsteroidSpawner : MonoBehaviour
             time_since_last_asteroid = 0;
         }
     }
+    #endregion
 }
