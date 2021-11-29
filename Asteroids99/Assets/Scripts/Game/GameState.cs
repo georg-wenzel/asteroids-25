@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameState : MonoBehaviour, IHPObserver
+public class GameState : MonoBehaviour, IHPObserver, IAsteroidDeathObserver
 {
     #region properties
     /// <summary>
@@ -12,15 +12,15 @@ public class GameState : MonoBehaviour, IHPObserver
     /// <summary>
     /// Whether or not the player is still playing.
     /// </summary>
-    public bool GameOver { get; set; } = false;
+    public bool GameOver { get; private set; } = false;
     /// <summary>
     /// The current HP of the player's spaceship.
     /// </summary>
-    public int HP { get; set; }
+    public int HP { get; private set; }
     /// <summary>
     /// The current player's score.
     /// </summary>
-    public int Score { get; set; }
+    public int Score { get; private set; }
     #endregion
 
     #region methods
@@ -39,6 +39,19 @@ public class GameState : MonoBehaviour, IHPObserver
         this.HP = hp;
         if(this.HP == 0)
             this.GameOver = true;
+    }
+
+    /// <summary>
+    /// Invoked by AsteroidDeathObservables (asteroids) to notify the GameState, which adds additional score
+    /// </summary>
+    /// <param name="asteroid">The asteroid which died</param>
+    public void NotifyDeath(GameObject asteroid)
+    {
+        int score = 100;
+        //multiply score by size of asteroid (e.g. 3x scale => 3x score)
+        if (asteroid.transform.localScale.magnitude > 1)
+            score *= (int)asteroid.transform.localScale.x;
+        this.Score += score;
     }
     #endregion
 }
