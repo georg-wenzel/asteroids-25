@@ -25,6 +25,10 @@ public class GameBoundaries : MonoBehaviour
     /// </summary>
     public BoxCollider2D rightCollider;
     /// <summary>
+    /// The Game Space
+    /// </summary>
+    public BoxCollider2D GameSpace;
+    /// <summary>
     /// Size of the game space in the X dimension
     /// </summary>
     public float GameSizeX { get; private set; }
@@ -32,16 +36,35 @@ public class GameBoundaries : MonoBehaviour
     /// Size of the game space in the Y dimension
     /// </summary>
     public float GameSizeY { get; private set; }
+    /// <summary>
+    /// The x position of the right border
+    /// </summary>
+    public float RightBorder { get; private set; }
+    /// <summary>
+    /// The x position of the left border
+    /// </summary>
+    public float LeftBorder { get; private set; }
+    /// <summary>
+    /// The y position of the top border
+    /// </summary>
+    public float TopBorder { get; private set; }
+    /// <summary>
+    /// The y position of the bottom border
+    /// </summary>
+    public float BottomBorder { get; private set; }
     #endregion
 
     #region methods
     public void Start()
     {
-        //Calculate the size of the game space via the bounding boxes
-        GameSizeX = (rightCollider.bounds.center - rightCollider.bounds.extents).x -
-            (leftCollider.bounds.center + leftCollider.bounds.extents).x;
-        GameSizeY = (topCollider.bounds.center - topCollider.bounds.extents).y -
-            (bottomCollider.bounds.center + bottomCollider.bounds.extents).y;
+        //Calculate the border coordinates
+        RightBorder = rightCollider.bounds.center.x - rightCollider.bounds.extents.x;
+        LeftBorder = leftCollider.bounds.center.x + leftCollider.bounds.extents.x;
+        TopBorder = topCollider.bounds.center.y - topCollider.bounds.extents.y;
+        BottomBorder = bottomCollider.bounds.center.y + bottomCollider.bounds.extents.y;
+        //Calculate the size of the game space
+        GameSizeX = RightBorder - LeftBorder;
+        GameSizeY = TopBorder - BottomBorder;
     }
     #endregion
 
