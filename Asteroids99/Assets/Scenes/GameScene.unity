@@ -420,6 +420,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1280522079
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1280522081}
+  - component: {fileID: 1280522080}
+  m_Layer: 0
+  m_Name: GameStateManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1280522080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280522079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b90065a43b16074bba8fe5d00dc3013, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerSpaceship: {fileID: 1734822940}
+--- !u!4 &1280522081
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280522079}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1734822940
 GameObject:
   m_ObjectHideFlags: 0
@@ -435,6 +479,7 @@ GameObject:
   - component: {fileID: 1734822944}
   - component: {fileID: 1734822946}
   - component: {fileID: 1734822947}
+  - component: {fileID: 1734822948}
   m_Layer: 7
   m_Name: Spaceship
   m_TagString: Untagged
@@ -479,8 +524,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 2089470087
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f20a79ee83797a94193ad4a8be0201fb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -532,14 +577,14 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.1}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.48, y: 2.79}
+    oldSize: {x: 4.64, y: 3.72}
     newSize: {x: 1.16, y: 0.93}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -595,3 +640,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Missile: {fileID: 7543521301771230801, guid: 397ba9c45fca8c541b929f9a133744f7, type: 3}
+--- !u!114 &1734822948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1734822940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65f215639362ca240bfa580bac8c3ac3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StartingHP: 3
