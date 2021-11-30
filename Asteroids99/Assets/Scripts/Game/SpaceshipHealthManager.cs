@@ -29,6 +29,14 @@ public class SpaceshipHealthManager : MonoBehaviour, IHPObservable
     /// Does NOT update with the true HP of the ship. Use the observable for this.
     /// </summary>
     public int StartingHP = 3;
+    /// <summary>
+    /// Audio to play when the spaceship gets hit
+    /// </summary>
+    public AudioClip SpaceshipHitSound;
+    /// <summary>
+    /// The Game Object to play a local audio clip.
+    /// </summary>
+    public GameObject LocalAudioPrefab;
     #endregion
 
     #region methods
@@ -87,6 +95,11 @@ public class SpaceshipHealthManager : MonoBehaviour, IHPObservable
     {
         if(collision.gameObject.tag.Equals("Asteroid") && iframes == 0)
         {
+            //play hit audio
+            GameObject go = GameObject.Instantiate(LocalAudioPrefab);
+            go.transform.position = this.transform.position;
+            go.GetComponent<LocalAudioScript>().Clip = SpaceshipHitSound;
+
             //register a hit if HP is > 0 and notify the observers 
             if (this.hp > 0)
                 this.hp -= 1;

@@ -68,9 +68,9 @@ public class SpaceshipMovement : MonoBehaviour
         }
 
         //update the velocity, clamping it to a maximum magnitude (max speed is the same in multiple dimensions as in one)
-        this.velocity = Vector2.ClampMagnitude(this.velocity + movementVector * Time.deltaTime * 0.04f * translationSpeed, 0.035f);
+        this.velocity = Vector2.ClampMagnitude(this.velocity + movementVector * Time.deltaTime * 0.05f * translationSpeed, 0.05f);
         //apply this frame's rotation and translation.
-        transform.Rotate(new Vector3(0, 0, rotationDegrees * rotationSpeed));
+        transform.Rotate(new Vector3(0, 0, rotationDegrees * rotationSpeed * 1.5f));
         transform.Translate(velocity, Space.World);
     }
     #endregion
