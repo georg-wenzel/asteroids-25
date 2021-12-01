@@ -9,10 +9,13 @@ public class EnemySquare : MonoBehaviour
 
     #region fields
 
-    public GameObject gameOverUI; // red X, active when player is dead
-    public TMP_Text playerName;
-    public TMP_Text playerScore;
-    public TMP_Text playerHP;
+    [SerializeField] GameObject gameOverUI; // red X, active when player is dead
+    [SerializeField] TMP_Text playerName;
+    [SerializeField] TMP_Text playerScore;
+    [SerializeField] TMP_Text playerHP;
+    [SerializeField] GameObject enemyBoxes;
+
+    public GameState currentGameState {get;private set;}
 
     #endregion
 
@@ -25,6 +28,7 @@ public class EnemySquare : MonoBehaviour
 
     public void UpdateUI(GameState gameState)
     {
+        currentGameState = gameState;
         if(!gameState.GameOver){
             playerHP.SetText(gameState.HP.ToString());
             playerScore.SetText(gameState.Score.ToString());
@@ -32,6 +36,15 @@ public class EnemySquare : MonoBehaviour
         else if(gameState.GameOver)
         {
             gameOverUI.SetActive(true);
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if(other.gameObject.tag.Equals("TODO")) // TODO
+        {
+            EnemyBoxes eb = (EnemyBoxes)enemyBoxes.GetComponent(typeof(EnemyBoxes));
+            eb.SpawnAsteroidOnOtherPlayer(this);
         }
     }
 

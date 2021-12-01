@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4740038393190999176}
   - component: {fileID: 4740038393190999175}
   - component: {fileID: 3953337868853916495}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: EnemySquare
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,6 +149,7 @@ MonoBehaviour:
   playerName: {fileID: 4740038394378729152}
   playerScore: {fileID: 4740038395200264698}
   playerHP: {fileID: 4740038394929455352}
+  enemyBoxes: {fileID: 0}
 --- !u!1 &4740038394088871961
 GameObject:
   m_ObjectHideFlags: 0
@@ -160,7 +161,7 @@ GameObject:
   - component: {fileID: 4740038394088871962}
   - component: {fileID: 4740038394088871964}
   - component: {fileID: 4740038394088871963}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,7 +236,7 @@ GameObject:
   - component: {fileID: 4740038394378729215}
   - component: {fileID: 4740038394378729153}
   - component: {fileID: 4740038394378729152}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -369,7 +370,7 @@ GameObject:
   - component: {fileID: 4740038394794638789}
   - component: {fileID: 4740038394794638791}
   - component: {fileID: 4740038394794638790}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: GameOverX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -444,7 +445,7 @@ GameObject:
   - component: {fileID: 4740038394880881287}
   - component: {fileID: 4740038394880881289}
   - component: {fileID: 4740038394880881288}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -519,7 +520,7 @@ GameObject:
   - component: {fileID: 4740038394929455351}
   - component: {fileID: 4740038394929455353}
   - component: {fileID: 4740038394929455352}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: HP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -653,7 +654,7 @@ GameObject:
   - component: {fileID: 4740038395200264697}
   - component: {fileID: 4740038395200264699}
   - component: {fileID: 4740038395200264698}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Score
   m_TagString: Untagged
   m_Icon: {fileID: 0}
