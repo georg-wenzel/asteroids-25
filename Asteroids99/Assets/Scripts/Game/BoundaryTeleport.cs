@@ -16,17 +16,17 @@ public class BoundaryTeleport : MonoBehaviour
     /// The boundaries of the game.
     /// </summary>
     private GameBoundaries bounds;
-    /// <summary>
-    /// Whether or not this object has had contact before.
-    /// </summary>
-    private bool firstContact = true;
     #endregion
 
     #region properties
     /// <summary>
-    /// If set to true, ignores the first collision
+    /// Defines the two methods for boundary detection: OnBorderContact (when the object collider touches the game boundary) or OnBecomesInvisible (once the sprite becomes completely invisible)
     /// </summary>
-    public bool IgnoreFirstContact = false;
+    public enum BoundaryDetectionMethod
+    {
+        OnBorderContact, OnLeavesGameSpace
+    }
+    public BoundaryDetectionMethod DetectionType;
     #endregion
 
     #region methods
@@ -42,11 +42,8 @@ public class BoundaryTeleport : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (IgnoreFirstContact && firstContact)
-        {
-            firstContact = false;
-            return;
-        }
+        //handler for boundary detection method: on border contact
+        if (DetectionType != BoundaryDetectionMethod.OnBorderContact) return;
 
         //we have to calculate the current size of the collider in the frame of the collision, because it changes with varying orientation of the object
         //Give 10% leeway to own size to avoid triggering a collision on the other side after movement
@@ -84,6 +81,37 @@ public class BoundaryTeleport : MonoBehaviour
                 this.transform.position.y,
                 this.transform.position.z),
                 this.transform.rotation);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.Equals(bounds.GameSpace) && DetectionType == BoundaryDetectionMethod.OnLeavesGameSpace)
+        {
+            if (transform.position.x < bounds.LeftBorder)
+                transform.SetPositionAndRotation(new Vector3(
+                    bounds.RightBorder + ownCollider.bounds.extents.x,
+                    transform.position.y,
+                    transform.position.z),
+                    transform.rotation);
+            else if (transform.position.x > bounds.RightBorder)
+                transform.SetPositionAndRotation(new Vector3(
+                    bounds.LeftBorder - ownCollider.bounds.extents.x,
+                    transform.position.y,
+                    transform.position.z),
+                    transform.rotation);
+            if (transform.position.y > bounds.TopBorder)
+                transform.SetPositionAndRotation(new Vector3(
+                    transform.position.x,
+                    bounds.BottomBorder - ownCollider.bounds.extents.y,
+                    transform.position.z),
+                    transform.rotation);
+            else if (transform.position.y < bounds.BottomBorder)
+                transform.SetPositionAndRotation(new Vector3(
+                    transform.position.x,
+                    bounds.TopBorder + ownCollider.bounds.extents.y,
+                    transform.position.z),
+                    transform.rotation);
         }
     }
     #endregion
