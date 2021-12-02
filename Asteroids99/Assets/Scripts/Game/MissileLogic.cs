@@ -20,13 +20,9 @@ public class MissileLogic : MonoBehaviour
     /// </summary>
     public float Speed = 1.0f;
     /// <summary>
-    /// The sound that plays when the missile hits
-    /// </summary>
-    public AudioClip hit;
-    /// <summary>
     /// The sound that plays when the missile fires
     /// </summary>
-    public AudioClip fire;
+    public AudioClip Fire;
     /// <summary>
     /// The Game Object to play a local audio clip.
     /// </summary>
@@ -43,7 +39,7 @@ public class MissileLogic : MonoBehaviour
 
         GameObject go = GameObject.Instantiate(LocalAudioPrefab);
         go.transform.position = this.transform.position;
-        go.GetComponent<LocalAudioScript>().Clip = fire;
+        go.GetComponent<LocalAudioScript>().Clip = Fire;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -60,10 +56,6 @@ public class MissileLogic : MonoBehaviour
         //If colliding with asteroids, destroy this game object
         if(collision.collider.gameObject.tag.Equals("Asteroid"))
         {
-            GameObject go = GameObject.Instantiate(LocalAudioPrefab);
-            go.transform.position = this.transform.position;
-            go.GetComponent<LocalAudioScript>().Clip = hit;
-
             Destroy(this.gameObject);
         }
     }

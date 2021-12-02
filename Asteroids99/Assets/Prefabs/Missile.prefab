@@ -124,8 +124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 1
-  hit: {fileID: 8300000, guid: e5bcbd58aeb0bae4fa2046b4b11e3b7e, type: 3}
-  fire: {fileID: 8300000, guid: 681aaefc17047c34194727e0fd36e65e, type: 3}
+  Fire: {fileID: 8300000, guid: 681aaefc17047c34194727e0fd36e65e, type: 3}
   LocalAudioPrefab: {fileID: 8800876870491416032, guid: 7dccd9792a6a6324f9fe60d1c350765e, type: 3}
 --- !u!50 &7543521301771230807
 Rigidbody2D:

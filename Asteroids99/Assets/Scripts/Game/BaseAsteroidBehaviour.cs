@@ -31,6 +31,21 @@ public class BaseAsteroidBehaviour : MonoBehaviour, IAsteroidDeathObservable
     private HashSet<IAsteroidDeathObserver> observers;
     #endregion
 
+    #region properties
+    /// <summary>
+    /// The sound that plays when the missile hits
+    /// </summary>
+    public AudioClip Hit;
+    /// <summary>
+    /// The sound that plays when an asteroid is destroyed
+    /// </summary>
+    public AudioClip Explosion;
+    /// <summary>
+    /// The Game Object to play a local audio clip.
+    /// </summary>
+    public GameObject LocalAudioPrefab;
+    #endregion
+
     #region methods
     public void Awake()
     {
@@ -82,10 +97,19 @@ public class BaseAsteroidBehaviour : MonoBehaviour, IAsteroidDeathObservable
         //On collision with a missile
         if (collision.collider.gameObject.tag.Equals("Missile"))
         {
+            //Spawn an object for sound
+            GameObject go = GameObject.Instantiate(LocalAudioPrefab);
+            go.transform.position = this.transform.position;
+
             health--;
             if (health == 0)
             {
+                go.GetComponent<LocalAudioScript>().Clip = Explosion;
                 Destroy(this.gameObject);
+            }
+            else
+            {
+                go.GetComponent<LocalAudioScript>().Clip = Hit;
             }
         }
     }
