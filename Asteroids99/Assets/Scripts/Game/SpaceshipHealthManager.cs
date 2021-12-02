@@ -25,11 +25,6 @@ public class SpaceshipHealthManager : MonoBehaviour, IHPObservable
 
     #region properties
     /// <summary>
-    /// Defines how much HP the ship starts out with.
-    /// Does NOT update with the true HP of the ship. Use the observable for this.
-    /// </summary>
-    public int StartingHP = 3;
-    /// <summary>
     /// Audio to play when the spaceship gets hit
     /// </summary>
     public AudioClip SpaceshipHitSound;
@@ -47,7 +42,7 @@ public class SpaceshipHealthManager : MonoBehaviour, IHPObservable
 
     void Start()
     {
-        this.hp = StartingHP;
+        this.hp = 3;
         this.iframes = 0;
     }
     
