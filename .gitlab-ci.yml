@@ -124,11 +124,11 @@ test-editmode:
  #tags:
  #  - gitlab-org
 
-build-StandaloneLinux64:
-  <<: *build
-  variables:
-    BUILD_TARGET: StandaloneLinux64
-    BuildOptions: EnableHeadlessMode
+#build-StandaloneLinux64:
+# <<: *build
+#  variables:
+#    BUILD_TARGET: StandaloneLinux64
+#    BuildOptions: EnableHeadlessMode
 #build-StandaloneLinux64-il2cpp:
 #  <<: *build
 #  image: $IMAGE:$UNITY_VERSION-linux-il2cpp-$IMAGE_VERSION
@@ -219,7 +219,7 @@ pages:
     paths:
       - public
   only:
-      - master
+      - develop
       
 workflow:
   rules:
