@@ -1182,7 +1182,7 @@ GameObject:
   - component: {fileID: 1339204078}
   - component: {fileID: 1339204076}
   - component: {fileID: 1339204079}
-  - component: {fileID: 1339204077}
+  - component: {fileID: 1339204080}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -1209,7 +1209,7 @@ MonoBehaviour:
   serverTickRate: 30
   offlineScene: Assets/Scenes/MultiplayerConnect.unity
   onlineScene: Assets/Scenes/Lobby.unity
-  transport: {fileID: 1339204077}
+  transport: {fileID: 0}
   networkAddress: 3.70.240.213
   maxConnections: 30
   authenticator: {fileID: 0}
@@ -1218,31 +1218,6 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 6190380609171784527, guid: 18f3d864fa9bcf831b2a8f38048e5a3f, type: 3}
---- !u!114 &1339204077
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1339204075}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Port: 7777
-  DualMode: 1
-  NoDelay: 1
-  Interval: 10
-  Timeout: 10000
-  FastResend: 2
-  CongestionWindow: 0
-  SendWindowSize: 4096
-  ReceiveWindowSize: 4096
-  NonAlloc: 1
-  debugLog: 1
-  statisticsGUI: 0
-  statisticsLog: 0
 --- !u!4 &1339204078
 Transform:
   m_ObjectHideFlags: 0
@@ -1269,6 +1244,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d09f5c8bf2f4747b7a9284ef5d9ce2a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1339204080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339204075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0110f245bfcfc7d459681f7bd9ebc590, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  port: 7778
+  maxMessageSize: 16384
+  handshakeMaxSize: 3000
+  noDelay: 1
+  sendTimeout: 5000
+  receiveTimeout: 20000
+  serverMaxMessagesPerTick: 10000
+  clientMaxMessagesPerTick: 1000
+  batchSend: 1
+  waitBeforeSend: 0
+  clientUseWss: 0
+  sslEnabled: 0
+  sslCertJson: ./cert.json
+  sslProtocols: 3072
+  _logLevels: 0
 --- !u!1 &1430445757
 GameObject:
   m_ObjectHideFlags: 0
