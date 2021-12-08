@@ -9,9 +9,9 @@ public class AsteroidSpawner : MonoBehaviour, IAsteroidDeathObserver
 {
     #region fields
     /// <summary>
-    /// The time since the last asteroid was spawned
+    /// The time the last asteroid was spawned
     /// </summary>
-    float time_since_last_asteroid = 0;
+    float last_asteroid = 0;
     /// <summary>
     /// The number of currently active asteroids
     /// </summary>
@@ -56,6 +56,7 @@ public class AsteroidSpawner : MonoBehaviour, IAsteroidDeathObserver
                 }
             }
         }
+        StartCoroutine(SpawnNewAsteroid());
     }
 
     /// <summary>
@@ -69,18 +70,6 @@ public class AsteroidSpawner : MonoBehaviour, IAsteroidDeathObserver
         SpawnAndInjectObservers();
     }
 
-    void Update()
-    {
-        time_since_last_asteroid += Time.deltaTime;
-        if(time_since_last_asteroid > 1.0f && asteroid_count < MaxAsteroids)
-        {
-            builder.Reset();
-            //1 in 5 chance to build a large asteroid
-            if (Random.Range(0, 10) < 2) builder.BuildLarge();
-            SpawnAndInjectObservers();
-        }
-    }
-
     /// <summary>
     /// Spawns the Asteroid currently stored in the builder, and injects all active death observers into it.
     /// </summary>
@@ -92,13 +81,35 @@ public class AsteroidSpawner : MonoBehaviour, IAsteroidDeathObserver
         //Register additional observers
         foreach (IAsteroidDeathObserver o in additionalObservers)
             obj.GetComponent<BaseAsteroidBehaviour>().register(o);
-        time_since_last_asteroid = 0;
+        last_asteroid = Time.time;
         asteroid_count++;
     }
 
+    /// <summary>
+    /// When this object is notified of an asteroids death, decrease the asteroid count
+    /// </summary>
+    /// <param name="asteroid">The asteroid that died</param>
     public void NotifyDeath(GameObject asteroid)
     {
         asteroid_count--;
+    }
+
+    /// <summary>
+    /// Coroutine to spawn a new asteroid every 1 second (= if none was spawned in the last 0.9 seconds)
+    /// </summary>
+    IEnumerator SpawnNewAsteroid()
+    {
+        for(; ;)
+        {
+            if (Time.time - last_asteroid >= 0.9f && asteroid_count < MaxAsteroids)
+            {
+                builder.Reset();
+                //1 in 5 chance to build a large asteroid
+                if (Random.Range(0, 10) < 2) builder.BuildLarge();
+                SpawnAndInjectObservers();
+            }
+            yield return new WaitForSeconds(0.5f);
+        }
     }
     #endregion
 }
