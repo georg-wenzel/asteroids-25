@@ -14,7 +14,7 @@ public class AsteroidBuilder : MonoBehaviour
     private List<string> scriptsToAttach;
     private int initialHealth;
     private int initialScale;
-    private int initialSpeed;
+    private float initialSpeed;
     private Color color;
     private Vector2 initialSpawn;
     private Vector2 targetDirection;
@@ -92,6 +92,12 @@ public class AsteroidBuilder : MonoBehaviour
         props.Scale = this.initialScale;
         props.Speed = this.initialSpeed;
         props.InitialMovementDirection = this.targetDirection;
+
+        foreach(string scriptName in scriptsToAttach)
+        {
+            go.AddComponent(System.Type.GetType(scriptName));
+        }
+
         props.GetComponent<SpriteRenderer>().color = color;
         return go;
     }
@@ -111,7 +117,8 @@ public class AsteroidBuilder : MonoBehaviour
     public void BuildAttack()
     {
         color = new Color(1, 0.3f, 0.3f, 1);
-        //TODO attach attack script here
+        initialSpeed *= 2f;
+        scriptsToAttach.Add("AttackAsteroidBehaviour");
     }
     #endregion
 }

@@ -79,16 +79,26 @@ public class BaseAsteroidBehaviour : MonoBehaviour, IAsteroidDeathObservable
 
         //inject game bounds
         bounds = GameObject.Find("GameView").GetComponent<GameBoundaries>();
+
+        StartCoroutine(VelocityMagnitudeCoroutine());
     }
 
-    void Update()
+    /// <summary>
+    /// Coroutine which updates the velocity magnitude to stay constant after a collision
+    /// </summary>
+    IEnumerator VelocityMagnitudeCoroutine()
     {
-        //if the magnitude of velocity changes from the desired (after a collision)
-        var magnitudeDiff = Mathf.Abs(velocityMagnitude - rigidbody2d.velocity.magnitude);
-        if (magnitudeDiff > 0.001f)
-        {
-            //make sure the velocity stays constant
-            rigidbody2d.velocity = rigidbody2d.velocity.normalized * velocityMagnitude;
+        for (; ; )
+        { 
+            //if the magnitude of velocity changes from the desired (after a collision)
+            var magnitudeDiff = Mathf.Abs(velocityMagnitude - rigidbody2d.velocity.magnitude);
+            if (magnitudeDiff > 0.001f)
+            {
+                //make sure the velocity stays constant
+                rigidbody2d.velocity = rigidbody2d.velocity.normalized * velocityMagnitude;
+            }
+
+            yield return new WaitForSeconds(.25f);
         }
     }
 
