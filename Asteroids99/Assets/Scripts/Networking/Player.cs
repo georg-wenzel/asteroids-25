@@ -10,7 +10,6 @@ namespace Networking
         [RequireComponent (typeof (NetworkMatch))]
         public class Player : NetworkBehaviour
     {
-    
         public static Player localPlayer;
         [SyncVar] public string matchID;
         [SyncVar] public int playerIndex;
@@ -85,6 +84,24 @@ namespace Networking
 
         }
 
+        public void SpawnAttackAsteroid(Player targetPlayer)
+        {
+            CmdSpawnAsteroid(targetPlayer);
+        }
+
+        // runs on server Version of Player
+        [Command]
+        void CmdSpawnAsteroid(Player targetPlayer)
+        {
+            TargetSpawnAsteroid(true, matchID, targetPlayer.playerIndex);
+        }
+
+        [TargetRpc]
+        void TargetSpawnAsteroid(bool success, string matchID, int playerIndex)
+        {
+            //TODO
+            GameObject.Find("AsteroidManager").GetComponent<AsteroidSpawner>().SpawnAttackAsteroid();
+        }
 
 
         public void JoinGame(string inputID)
@@ -149,7 +166,10 @@ namespace Networking
         {
             Debug.Log($"This MatchId: {matchID} | Starting Game");
             //Additively LoadGameScene
-            SceneManager.LoadScene("Game", LoadSceneMode.Additive);
+            NetworkHelper helper = new GameObject("NetworkHelper").AddComponent<NetworkHelper>();
+            StartCoroutine(helper.LoadSceneEnumerator("OnlineGameScene"));
+            UILobby.instance.startSuccess();
+            Debug.Log("Loaded Game");
         }
 
         // Update is called once per frame

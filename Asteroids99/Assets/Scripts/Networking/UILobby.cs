@@ -78,6 +78,15 @@ namespace Networking{
             }
         }
 
+        public void startSuccess()
+        {
+            Debug.Log("UI Lobby Start Success");
+            hostJoin.SetActive(false);
+            startGameButton.SetActive(false);
+            lobbyCanvas.enabled = false;
+            localPlayerLobbyUI.SetActive(false);
+        }
+
         public void backToJoinHost()
         {
             // when back button in lobby is pressed

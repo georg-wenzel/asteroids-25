@@ -23,7 +23,8 @@ public class EnemyBoxes : MonoBehaviour
     public void SpawnAsteroidOnOtherPlayer(EnemySquare sourceSquare)
     {
         EnemySquare destination = GetRandomNeighbourSquare(sourceSquare);
-        // TODO spawn asteroid in enemy square
+        //TODO inject local player
+        //localPlayer.SpawnAttackAsteroid(destination.localPlayer);
     }
 
     public EnemySquare GetRandomNeighbourSquare(EnemySquare enemySquare)

@@ -343,6 +343,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2038462464}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &322601344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -824,6 +836,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8185b45734a889f4ba7809b0e3723ae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  giveName: {fileID: 0}
+  hostJoin: {fileID: 322993072}
+  nameInput: {fileID: 0}
 --- !u!4 &625069604
 Transform:
   m_ObjectHideFlags: 0
@@ -2917,6 +2932,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   gameManagerPrefab: {fileID: 6190380609171784527, guid: 18f3d864fa9bcf831b2a8f38048e5a3f, type: 3}
+  maxMatchPlayers: 25
 --- !u!114 &2073236844
 MonoBehaviour:
   m_ObjectHideFlags: 0

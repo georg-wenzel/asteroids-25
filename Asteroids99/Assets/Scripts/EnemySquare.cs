@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Networking;
 
 public class EnemySquare : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class EnemySquare : MonoBehaviour
     [SerializeField] TMP_Text playerScore;
     [SerializeField] TMP_Text playerHP;
     [SerializeField] GameObject enemyBoxes;
+
+    public Player localPlayer;
 
     public GameState currentGameState {get;private set;}
 
