@@ -36,12 +36,12 @@ public class SpaceshipMovement : MonoBehaviour
         this.velocity = new Vector2(0, 0);
     }
 
-    void Update()
+    void FixedUpdate()
     {
         //each frame, the velocity decays by a static amount, and if the decay changes the sign of the dimension, that dimension's velocity changes to 0.
         float decreaseX = -0.01f * Mathf.Sign(velocity.x);
         float decreaseY = -0.01f * Mathf.Sign(velocity.y);
-        Vector2 new_velocity = this.velocity + new Vector2(decreaseX, decreaseY) * Time.deltaTime;
+        Vector2 new_velocity = this.velocity + new Vector2(decreaseX, decreaseY);
         velocity = new Vector2((new_velocity.x * velocity.x > 0) ? new_velocity.x : 0,
                                 (new_velocity.y * velocity.y > 0) ? new_velocity.y : 0);
 
@@ -60,17 +60,17 @@ public class SpaceshipMovement : MonoBehaviour
         }
         if(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
-            rotationDegrees -= 0.2f;
+            rotationDegrees -= 8f;
         }
         if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
-            rotationDegrees += 0.2f;
+            rotationDegrees += 8f;
         }
 
         //update the velocity, clamping it to a maximum magnitude (max speed is the same in multiple dimensions as in one)
-        this.velocity = Vector2.ClampMagnitude(this.velocity + movementVector * Time.deltaTime * 0.05f * translationSpeed, 0.05f);
+        this.velocity = Vector2.ClampMagnitude(this.velocity + movementVector * translationSpeed * 0.025f, 0.75f);
         //apply this frame's rotation and translation.
-        transform.Rotate(new Vector3(0, 0, rotationDegrees * rotationSpeed * 1.5f));
+        transform.Rotate(new Vector3(0, 0, rotationDegrees * rotationSpeed));
         transform.Translate(velocity, Space.World);
     }
     #endregion
