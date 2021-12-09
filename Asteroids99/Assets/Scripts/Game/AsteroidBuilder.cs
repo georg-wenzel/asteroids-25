@@ -14,7 +14,8 @@ public class AsteroidBuilder : MonoBehaviour
     private List<string> scriptsToAttach;
     private int initialHealth;
     private int initialScale;
-    private int initialSpeed;
+    private float initialSpeed;
+    private Color color;
     private Vector2 initialSpawn;
     private Vector2 targetDirection;
     #endregion
@@ -46,6 +47,7 @@ public class AsteroidBuilder : MonoBehaviour
         initialHealth = 1;
         initialScale = 1;
         initialSpeed = 1;
+        color = new Color(1, 1, 1, 1);
 
         //==================== SPAWN THE METEOR OUTSIDE THE ARENA, TOWARDS A TARGET POINT INSIDE OF IT ====================
         //this implementation >should< be relatively robust to resizing of the GameView.
@@ -90,6 +92,13 @@ public class AsteroidBuilder : MonoBehaviour
         props.Scale = this.initialScale;
         props.Speed = this.initialSpeed;
         props.InitialMovementDirection = this.targetDirection;
+
+        foreach(string scriptName in scriptsToAttach)
+        {
+            go.AddComponent(System.Type.GetType(scriptName));
+        }
+
+        props.GetComponent<SpriteRenderer>().color = color;
         return go;
     }
 
@@ -100,6 +109,16 @@ public class AsteroidBuilder : MonoBehaviour
     {
         initialScale = 3;
         initialHealth = 3;
+    }
+
+    /// <summary>
+    /// Build an attack asteroid
+    /// </summary>
+    public void BuildAttack()
+    {
+        color = new Color(1, 0.3f, 0.3f, 1);
+        initialSpeed *= 2f;
+        scriptsToAttach.Add("AttackAsteroidBehaviour");
     }
     #endregion
 }

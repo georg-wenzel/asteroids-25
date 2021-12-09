@@ -9,9 +9,9 @@ public class AsteroidSpawner : MonoBehaviour, IAsteroidDeathObserver
 {
     #region fields
     /// <summary>
-    /// The time since the last asteroid was spawned
+    /// The time the last asteroid was spawned
     /// </summary>
-    float time_since_last_asteroid = 0;
+    float last_asteroid = 0;
     /// <summary>
     /// The number of currently active asteroids
     /// </summary>
@@ -56,31 +56,60 @@ public class AsteroidSpawner : MonoBehaviour, IAsteroidDeathObserver
                 }
             }
         }
+        StartCoroutine(SpawnNewAsteroid());
     }
 
-    void Update()
+    /// <summary>
+    /// Spawns an attack asteroid on this players field. The asteroid counts against the maximum limit, but can be spawned
+    /// even if the maximum amount of asteroids are on the field. This method can be called externally.
+    /// </summary>
+    public void SpawnAttackAsteroid()
     {
-        time_since_last_asteroid += Time.deltaTime;
-        if(time_since_last_asteroid > 1.0f && asteroid_count < MaxAsteroids)
-        {
-            builder.Reset();
-            //1 in 5 chance to build a large asteroid
-            if (Random.Range(0, 10) < 2) builder.BuildLarge();
-            GameObject obj = builder.Spawn();
-            //Register this as an observer for the asteroid death
-            obj.GetComponent<BaseAsteroidBehaviour>().register(this);
-            //Register additional observers
-            foreach(IAsteroidDeathObserver o in additionalObservers)
-                obj.GetComponent<BaseAsteroidBehaviour>().register(o);
-
-            time_since_last_asteroid = 0;
-            asteroid_count++;
-        }
+        builder.Reset();
+        builder.BuildAttack();
+        SpawnAndInjectObservers();
     }
 
+    /// <summary>
+    /// Spawns the Asteroid currently stored in the builder, and injects all active death observers into it.
+    /// </summary>
+    private void SpawnAndInjectObservers()
+    {
+        GameObject obj = builder.Spawn();
+        //Register this as an observer for the asteroid death
+        obj.GetComponent<BaseAsteroidBehaviour>().register(this);
+        //Register additional observers
+        foreach (IAsteroidDeathObserver o in additionalObservers)
+            obj.GetComponent<BaseAsteroidBehaviour>().register(o);
+        last_asteroid = Time.time;
+        asteroid_count++;
+    }
+
+    /// <summary>
+    /// When this object is notified of an asteroids death, decrease the asteroid count
+    /// </summary>
+    /// <param name="asteroid">The asteroid that died</param>
     public void NotifyDeath(GameObject asteroid)
     {
         asteroid_count--;
+    }
+
+    /// <summary>
+    /// Coroutine to spawn a new asteroid every 1 second (= if none was spawned in the last 0.9 seconds)
+    /// </summary>
+    IEnumerator SpawnNewAsteroid()
+    {
+        for(; ;)
+        {
+            if (Time.time - last_asteroid >= 0.9f && asteroid_count < MaxAsteroids)
+            {
+                builder.Reset();
+                //1 in 5 chance to build a large asteroid
+                if (Random.Range(0, 10) < 2) builder.BuildLarge();
+                SpawnAndInjectObservers();
+            }
+            yield return new WaitForSeconds(0.5f);
+        }
     }
     #endregion
 }
