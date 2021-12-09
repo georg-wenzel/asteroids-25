@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Movement of a missile
+/// Logic of a missile
 /// </summary>
-public class MissileMovement : MonoBehaviour
+public class MissileLogic : MonoBehaviour
 {
     #region fields
     /// <summary>
@@ -19,6 +19,14 @@ public class MissileMovement : MonoBehaviour
     /// The travel speed of the missile (Must be set before Start() is called)
     /// </summary>
     public float Speed = 1.0f;
+    /// <summary>
+    /// The sound that plays when the missile fires
+    /// </summary>
+    public AudioClip Fire;
+    /// <summary>
+    /// The Game Object to play a local audio clip.
+    /// </summary>
+    public GameObject LocalAudioPrefab;
     #endregion
 
     #region methods
@@ -28,6 +36,10 @@ public class MissileMovement : MonoBehaviour
         GetComponent<Rigidbody2D>().AddForce(new Vector2(transform.up.x, transform.up.y) * 0.3f * Speed);
 
         bounds = GameObject.Find("GameView").GetComponent<GameBoundaries>();
+
+        GameObject go = GameObject.Instantiate(LocalAudioPrefab);
+        go.transform.position = this.transform.position;
+        go.GetComponent<LocalAudioScript>().Clip = Fire;
     }
 
     private void OnTriggerExit2D(Collider2D collision)

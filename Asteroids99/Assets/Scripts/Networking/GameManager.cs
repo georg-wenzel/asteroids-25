@@ -13,6 +13,7 @@ namespace Networking
         List<Player> players = new List<Player>();
         public void AddPlayer(Player player)
         {
+            Debug.Log($"Adding player {player} {player.playerIndex }");
             players.Add(player);
 
         }

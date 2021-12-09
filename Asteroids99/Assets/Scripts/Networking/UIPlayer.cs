@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace Networking{
     public class UIPlayer : MonoBehaviour
     {
-        [SerializeField] Text text;
+        [SerializeField] public Text text;
         Player player;
         // Start is called before the first frame update
 

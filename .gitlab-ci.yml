@@ -10,7 +10,7 @@ variables:
   UNITY_VERSION: "2020.3.22f1"
   IMAGE: unityci/editor # https://hub.docker.com/r/unityci/editor
   IMAGE_VERSION: "0.15" # https://github.com/game-ci/docker/releases
-  UNITY_DIR: $CI_PROJECT_DIR # this needs to be an absolute path. Defaults to the root of your tree.
+  UNITY_DIR: $CI_PROJECT_DIR/Asteroids99 # this needs to be an absolute path. Defaults to the root of your tree.
 
 
 image: $IMAGE:$UNITY_VERSION-base-$IMAGE_VERSION
@@ -60,9 +60,9 @@ get-activation-file:
     expire_in: 2 weeks
   # https://gitlab.com/gableroux/unity3d-gitlab-ci-example/-/issues/83
   # you may need to remove or replace these to fit your need if you are using your own runners
-  tags:
-    - gitlab-org
-  coverage: /<Linecoverage>(.*?)</Linecoverage>/
+  #tags:#
+  #  - gitlab-org
+#  coverage: /<Linecoverage>(.*?)</Linecoverage>/
 
 test-playmode:
   <<: *test
@@ -73,7 +73,6 @@ test-editmode:
   <<: *test
   variables:
     TEST_PLATFORM: editmode
-
 # uncomment the following blocks if you'd like to have junit reporting unity test results in gitlab
 # We currently have the following issue which prevents it from working right now, but you can give
 # a hand if you're interested in this feature:
@@ -120,16 +119,16 @@ test-editmode:
   artifacts:
     paths:
       - $UNITY_DIR/Builds/
-  # https://gitlab.com/gableroux/unity3d-gitlab-ci-example/-/issues/83
-  # you may need to remove or replace these to fit your need if you are using your own runners
-  tags:
-    - gitlab-org
+ # https://gitlab.com/gableroux/unity3d-gitlab-ci-example/-/issues/83
+ # you may need to remove or replace these to fit your need if you are using your own runners
+ #tags:
+ #  - gitlab-org
 
-build-StandaloneLinux64:
-  <<: *build
-  variables:
-    BUILD_TARGET: StandaloneLinux64
-
+#build-StandaloneLinux64:
+# <<: *build
+#  variables:
+#    BUILD_TARGET: StandaloneLinux64
+#    BuildOptions: EnableHeadlessMode
 #build-StandaloneLinux64-il2cpp:
 #  <<: *build
 #  image: $IMAGE:$UNITY_VERSION-linux-il2cpp-$IMAGE_VERSION
@@ -220,13 +219,9 @@ pages:
     paths:
       - public
   only:
-   - master
-
+      - develop
+      
 workflow:
   rules:
-    - if: $CI_MERGE_REQUEST_ID
-      when: never
-    - if: $CI_COMMIT_TAG
-      when: never
-    - when: always
-
+    - if: $CI_COMMIT_BRANCH == "develop" || $CI_COMMIT_BRANCH == "master" 
+      when: always
