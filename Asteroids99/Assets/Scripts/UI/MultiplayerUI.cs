@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using Networking;
 
 public class MultiplayerUI : MonoBehaviour
 {

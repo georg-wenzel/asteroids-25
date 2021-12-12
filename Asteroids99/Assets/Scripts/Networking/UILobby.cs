@@ -15,8 +15,6 @@ namespace Networking{
         [SerializeField] Button joinButton;
         [SerializeField] Button hostButton;
 
-        [SerializeField] Button backButton;
-
         [SerializeField] GameObject hostJoin;
         [SerializeField] Canvas lobbyCanvas;
 
@@ -65,7 +63,8 @@ namespace Networking{
                 startGameButton.SetActive(false);
             }
         }
-        public void HostSuccess(bool success, string matchID){
+        public void HostSuccess(bool success, string matchID)
+        {
             if(!success){
                 hostJoin.SetActive(true);
             } else {
@@ -87,13 +86,6 @@ namespace Networking{
             localPlayerLobbyUI.SetActive(false);
         }
 
-        public void backToJoinHost()
-        {
-            // when back button in lobby is pressed
-            lobbyCanvas.enabled = false;
-            hostJoin.SetActive(true);
-        }
-
         // Start is called before the first frame update
         void Start()
         {
@@ -103,7 +95,7 @@ namespace Networking{
         // Update is called once per frame
         void Update()
         {
-
+            
         }
 
         public GameObject SpawnPlayerUIPrefab(Player player) {
@@ -113,7 +105,8 @@ namespace Networking{
             return newUIPlayer;
         }
 
-        public void BeginGame() {
+        public void BeginGame() 
+        {
             Player.localPlayer.BeginGame();
         }
     }

@@ -64,7 +64,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
-  m_SortingLayerID: 0
+  m_SortingLayerID: 956885705
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &4740038393190999177
@@ -89,7 +89,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &4740038393190999176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,6 +150,7 @@ MonoBehaviour:
   playerScore: {fileID: 4740038395200264698}
   playerHP: {fileID: 4740038394929455352}
   enemyBoxes: {fileID: 0}
+  localPlayer: {fileID: 0}
 --- !u!1 &4740038394088871961
 GameObject:
   m_ObjectHideFlags: 0

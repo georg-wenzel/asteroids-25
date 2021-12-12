@@ -1,30 +1,76 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Networking;
 
+[System.Serializable]
 public class EnemyBoxes : MonoBehaviour
 {
-    
-    public void UpdateEnemyBoxes(GameState[] gameStates)
-    {
-        if(gameStates.Length != 24)
-        {
-            Debug.Log("GameStates.Length must be 24");
-            return;
-        }
 
-        for(int i=0; i<transform.childCount; i++)
+    void Awake()
+    {
+        GameObject.Find("Main Camera Lobby").GetComponent<AudioListener>().enabled = false;
+        GameObject.Find("LobbyUI").SetActive(false);
+    }
+
+    void Start()
+    {
+        List<GameState> gameStates = new List<GameState>();
+        for(int i=0; i<25; i++)
         {
-            EnemySquare script = (EnemySquare)transform.GetChild(i).GetComponent(typeof(EnemySquare));
-            script.UpdateUI(gameStates[i]);
+            gameStates.Add(new GameState(false, 3, 0));
+        }
+        UpdateEnemySquares(gameStates);
+    }
+
+    public void UpdateEnemySquares(List<GameState> gameStates)
+    {
+        for(int i=0; i<gameStates.Count; i++)
+        {
+            EnemySquare enemySquare = (EnemySquare)transform.GetChild(i).GetComponent(typeof(EnemySquare));
+            enemySquare.UpdateUI(gameStates[i]);
         }
     }
+
+    /*
+        Set localPlayer in EnemyBoxes.
+        Get all EnemyPlayers.
+        Asssign each enemyPlayer to an EnemySquare.
+    */
+    // public void InitializeEnemyBoxes()
+    // {
+    //     Match match = Player.localPlayer.currentMatch;
+    //     Player localPlayer;
+    //     List<Player> enemyPlayers = new List<Player>();
+    //     foreach (Player pl in match.players)
+    //     {
+    //         if(pl == Player.localPlayer)
+    //         {
+    //             localPlayer = pl;
+    //         }
+    //         else
+    //         {
+    //             Debug.Log("Added enemy player " + pl);
+    //             enemyPlayers.Add(pl);
+    //         }
+    //     }
+    //     if (enemyPlayers.Count > 24)
+    //     {
+    //         return;
+    //     }
+    //     for(int i=0; i<enemyPlayers.Count; i++)
+    //     {
+    //         EnemySquare enemySquare = (EnemySquare)transform.GetChild(i).GetComponent(typeof(EnemySquare));
+    //         enemySquare.localPlayer = enemyPlayers[i];
+    //         Debug.Log(enemyPlayers[i] + " has HP " + enemyPlayers[i].gameState.HP);
+    //         enemySquare.UpdateUI();
+    //     } 
+    // }
 
     public void SpawnAsteroidOnOtherPlayer(EnemySquare sourceSquare)
     {
         EnemySquare destination = GetRandomNeighbourSquare(sourceSquare);
-        //TODO inject local player
-        //localPlayer.SpawnAttackAsteroid(destination.localPlayer);
+        Player.localPlayer.SpawnAttackAsteroid(destination.localPlayer);
     }
 
     public EnemySquare GetRandomNeighbourSquare(EnemySquare enemySquare)
