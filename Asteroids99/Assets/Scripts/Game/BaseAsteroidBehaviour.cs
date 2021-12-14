@@ -126,6 +126,9 @@ public class BaseAsteroidBehaviour : MonoBehaviour, IAsteroidDeathObservable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        //Not sure why this sometimes happens, but this should not break anything ever, as all asteroids travel inwards first.
+        if (collision == null || bounds == null) return;
+
         //General sanity check - if we hit the outer borders (asteroid escaped)
         if (collision.Equals(bounds.OuterBounds))
         {
