@@ -53,6 +53,9 @@ public class SinglePlayerGameState : MonoBehaviour, IHPObserver, IAsteroidDeathO
     /// <param name="asteroid">The asteroid which died</param>
     public void NotifyDeath(GameObject asteroid)
     {
+        //Only add score / update if player is not game over
+        if (this.PlayerGameState.GameOver) return;
+
         int score = 100;
         //multiply score by size of asteroid (e.g. 3x scale => 3x score)
         if (asteroid.transform.localScale.magnitude > 1)
