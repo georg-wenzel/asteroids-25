@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using UnityEngine.UI;
 using TMPro;
+using Networking;
+using Mirror;
 
+[System.Serializable]
 public class EnemySquare : MonoBehaviour
 {
 
@@ -14,6 +18,8 @@ public class EnemySquare : MonoBehaviour
     [SerializeField] TMP_Text playerScore;
     [SerializeField] TMP_Text playerHP;
     [SerializeField] GameObject enemyBoxes;
+
+    public Player localPlayer;
 
     public GameState currentGameState {get;private set;}
 
@@ -26,14 +32,24 @@ public class EnemySquare : MonoBehaviour
         gameOverUI.SetActive(false);
     }
 
+    // [TargetRpc]
+    // public void SetLocalPlayerOnClient(Player player)
+    // {
+    //     this.localPlayer = player;
+    // }
+
+    // [Command]
+    // public void SetLocalPlayer(Player player)
+    // {
+    //     SetLocalPlayerOnClient(player);
+    // }
+
     public void UpdateUI(GameState gameState)
     {
-        currentGameState = gameState;
-        if(!gameState.GameOver){
-            playerHP.SetText(gameState.HP.ToString());
-            playerScore.SetText(gameState.Score.ToString());
-        }
-        else if(gameState.GameOver)
+        // playerName.text = "Player_" + localPlayer.playerIndex.ToString(); // TODO: delete later
+        playerHP.SetText(gameState.HP.ToString());
+        playerScore.SetText(gameState.Score.ToString());
+        if(gameState.GameOver)
         {
             gameOverUI.SetActive(true);
         }

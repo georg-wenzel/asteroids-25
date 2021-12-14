@@ -43,11 +43,13 @@ namespace Networking
         public static MatchMaker instance;
 
         readonly SyncList<Match> matches = new SyncList<Match>();
-        readonly SyncList<string> matchIDs = new SyncList<string>();
+        readonly SyncList<String> matchIDs = new SyncList<String>();
 
         [SerializeField] GameObject gameManagerPrefab;
         [SerializeField] int maxMatchPlayers = 25;
-        public Match getMatch(string matchID) {
+        public Match getMatch(String matchID) {
+            if(matches.Count == 0)
+                Debug.Log("Trying to get a match, but there are no matches in the match-list of the server-matchMaker.");
             foreach (Match match in matches)
             {
                 if (match.matchID == matchID)
@@ -57,7 +59,7 @@ namespace Networking
             }
             return null;
         }
-        public bool HostGame(string matchID, Player player, out int playerIndex)
+        public bool HostGame(String matchID, Player player, out int playerIndex)
         {
             playerIndex = -1;
             if (matchIDs.Contains(matchID))
@@ -67,16 +69,21 @@ namespace Networking
             }
             else
             {
-                matches.Add(new Match(matchID, player));
+                Match m = new Match(matchID, player);
+                matches.Add(m);
                 matchIDs.Add(matchID);
+                Debug.Log("Created new Match with ID " + getMatch(matchID).matchID);
+                // player.currentMatch = getMatch(matchID);
+                player.matchID = matchID;
                 Debug.Log ($"Match generated");
                 Debug.Log($"Match: {matchID} added");
                 playerIndex = 1;
+                player.playerIndex = playerIndex;
                 return true;
             }
-
         }
-        public bool JoinGame(string matchID, Player player, out int playerIndex)
+
+        public bool JoinGame(String matchID, Player player, out int playerIndex)
         {
             playerIndex = -1;
             if (!matchIDs.Contains(matchID))
@@ -95,9 +102,11 @@ namespace Networking
                             player.TargetPlayerFillLobby(p);
                         }
                         matches[i].AddPlayer(player);
-                        player.currentMatch = matches[i];
+                        // player.currentMatch = matches[i];
+                        player.matchID = matchID;
                         Debug.Log($"Player {player.name} joined match {matchID}");
                         playerIndex = matches[i].GetPlayers().Count;
+                        player.playerIndex = playerIndex;
                         matches[i].players[0].PlayerCountUpdated (matches[i].players.Count);
                         if (matches[i].players.Count == maxMatchPlayers) {
                                 matches[i].matchFull = true;
@@ -111,12 +120,15 @@ namespace Networking
                 return false;
             }
         }
+        
         public void BeginGame(String matchID)
         {
+            //GameManager gameManager = Instantiate (gameManagerPrefab).GetComponent<GameManager> ();
             for (int i = 0; i < matches.Count; i++) {
                 if (matches[i].matchID == matchID) {
                     matches[i].inMatch = true;
                     foreach (var player in matches[i].players) {
+                        //gameManager.AddPlayer(player);
                         player.StartGame ();
                     }
                     break;
@@ -151,12 +163,13 @@ namespace Networking
             }
             Debug.Log($"Random Match ID: {_id}");
             return _id;
-
         }
+
         // Start is called before the first frame update
         void Start()
         {
-            instance = this;
+            if (instance == null)
+                instance = this;
         }
 
         // Update is called once per frame

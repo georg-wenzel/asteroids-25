@@ -1,8 +1,10 @@
 using UnityEngine;
+using Networking;
 
 /// <summary>
 /// Script which keeps track of the Game State of the local player using provided observers
 /// </summary>
+[System.Serializable]
 public class SinglePlayerGameState : MonoBehaviour, IHPObserver, IAsteroidDeathObserver
 {
     #region properties
@@ -14,6 +16,10 @@ public class SinglePlayerGameState : MonoBehaviour, IHPObserver, IAsteroidDeathO
     /// The Game state of the active player
     /// </summary>
     public GameState PlayerGameState { get; private set; }
+    /// <summary>
+    /// The player's HUD
+    /// </summary>
+    public GameHUD HUD;
     #endregion
 
     #region methods
@@ -33,7 +39,12 @@ public class SinglePlayerGameState : MonoBehaviour, IHPObserver, IAsteroidDeathO
     {
         this.PlayerGameState.HP = hp;
         if (this.PlayerGameState.HP == 0)
+        {
             this.PlayerGameState.GameOver = true;
+            HUD.GameOver();
+        }
+        HUD.UpdateHP(this.PlayerGameState);
+        Player.localPlayer.SetGameState(this.PlayerGameState);
     }
 
     /// <summary>
@@ -47,6 +58,8 @@ public class SinglePlayerGameState : MonoBehaviour, IHPObserver, IAsteroidDeathO
         if (asteroid.transform.localScale.magnitude > 1)
             score *= (int)asteroid.transform.localScale.x;
         this.PlayerGameState.Score += score;
+        HUD.UpdateScore(this.PlayerGameState);
+        Player.localPlayer.SetGameState(this.PlayerGameState);
     }
     #endregion
 }

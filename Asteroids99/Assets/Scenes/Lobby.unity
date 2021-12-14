@@ -824,6 +824,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8185b45734a889f4ba7809b0e3723ae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  giveName: {fileID: 0}
+  hostJoin: {fileID: 322993072}
+  nameInput: {fileID: 0}
 --- !u!4 &625069604
 Transform:
   m_ObjectHideFlags: 0
@@ -1219,7 +1222,7 @@ GameObject:
   - component: {fileID: 923612286}
   - component: {fileID: 923612285}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: Main Camera Lobby
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2644,7 +2647,6 @@ MonoBehaviour:
   joinMatchInput: {fileID: 328448796}
   joinButton: {fileID: 386751162}
   hostButton: {fileID: 1875912212}
-  backButton: {fileID: 0}
   hostJoin: {fileID: 322993072}
   lobbyCanvas: {fileID: 2098660343}
   UIPlayerParent: {fileID: 650829582}
@@ -2917,6 +2919,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   gameManagerPrefab: {fileID: 6190380609171784527, guid: 18f3d864fa9bcf831b2a8f38048e5a3f, type: 3}
+  maxMatchPlayers: 25
 --- !u!114 &2073236844
 MonoBehaviour:
   m_ObjectHideFlags: 0

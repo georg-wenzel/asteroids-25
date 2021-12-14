@@ -49,3 +49,6 @@ TagManager:
   - name: Asteroids
     uniqueID: 3070263369
     locked: 0
+  - name: HUD
+    uniqueID: 956885705
+    locked: 0

@@ -7,15 +7,19 @@ using Mirror;
 
 namespace Networking
 {
-        [RequireComponent (typeof (NetworkMatch))]
-        public class Player : NetworkBehaviour
+    [RequireComponent (typeof (NetworkMatch))]
+    [System.Serializable]
+    public class Player : NetworkBehaviour
     {
-    
+
+        #region fields
         public static Player localPlayer;
         [SyncVar] public string matchID;
         [SyncVar] public int playerIndex;
 
-        [SyncVar] public Match currentMatch;
+        //[SyncVar] public Match currentMatch;
+
+        [SyncVar] public GameState gameState;
 
         NetworkMatch networkMatchChecker;
 
@@ -23,41 +27,161 @@ namespace Networking
 
         Guid netIDGuid;
 
+        #endregion fields
+
+        // Methods executed on client
+        // #################################################################
+        #region executedOnClient
+
+        #region executedByClient
 
         void Awake () {
-            networkMatchChecker = GetComponent<NetworkMatch> ();
+            networkMatchChecker = GetComponent<NetworkMatch>();
         }
 
-        public override void OnStartServer () {
-            netIDGuid = netId.ToString ().toGuid();
-            networkMatchChecker.matchId = netIDGuid;
+        void Start()
+        {
+            gameState = new GameState(false, 3, 0); // initialize GameState. Will be replaced as soon as gameState gets updated
         }
 
-
-        public override void OnStartClient () {
-            if (isLocalPlayer) {
-                localPlayer = this;
-            } else {
-                Debug.Log ($"Spawning other player UI Prefab");
-               
-            }
+        public void SetGameState(GameState gameState)
+        {
+            SetGameStateOnServer(gameState.GameOver, gameState.HP, gameState.Score); // set GameState on Server
         }
 
-        public override void OnStopClient () {
-            Debug.Log ($"Client Stopped");
-            ClientDisconnect ();
-        }
-
-        public override void OnStopServer () {
-            Debug.Log ($"Client Stopped on Server");
-            ServerDisconnect ();
-        }
         public void HostGame()
         {
             string matchID = MatchMaker.GetRandomMatchID();
             CmdHostGame(matchID);
         }
-        // runs on server Version of Player
+
+        public void SpawnAttackAsteroid(Player targetPlayer)
+        {
+            CmdSpawnAsteroid(targetPlayer);
+        }
+
+        public void JoinGame(string inputID)
+        {
+            CmdJoinGame(inputID);
+        }
+
+        public void BeginGame()
+        {
+            CmdBeginGame();
+        }
+
+        public void PrintClientDataOfMatch()
+        {
+            Debug.Log("#################");
+            Debug.Log("this: " + this);
+            Debug.Log("this.playerIndex: " + this.playerIndex);
+            Debug.Log("Players in match:");
+            // foreach(Player p in this.currentMatch.players)
+            // {
+            //     Debug.Log("-----");
+            //     Debug.Log("Player Index: " + p.playerIndex);
+            //     Debug.Log("Player Score: " + p.gameState.Score);
+            //     Debug.Log("-----");
+            // }
+            Debug.Log("#################");
+        }
+
+        #endregion executedByClient
+
+        #region executedByServer
+
+        [TargetRpc]
+        void TargetHostGame(bool success, string matchID, int playerIndex)
+        {
+            //localPlayer.playerIndex = playerIndex;
+            Debug.Log($"This MatchId: {matchID}");
+            UILobby.instance.HostSuccess(success, matchID);
+        }
+
+        [TargetRpc]
+        void TargetJoinGame(bool success, string matchID, int playerIndex)
+        {
+            //localPlayer.playerIndex = playerIndex;
+            //localPlayer.matchID = matchID;
+            Debug.Log($"This MatchId: {matchID}");
+            UILobby.instance.JoinSuccess(success, matchID);
+        }
+
+        [TargetRpc]
+        void TargetBeginGame()
+        {
+            Debug.Log($"This MatchId: {matchID} | Starting Game");
+            //Additively LoadGameScene
+            NetworkHelper helper = new GameObject("NetworkHelper").AddComponent<NetworkHelper>();
+            StartCoroutine(helper.LoadSceneEnumerator("OnlineGameScene"));
+            UILobby.instance.startSuccess();
+            Debug.Log("Loaded Game");
+        }
+
+        [TargetRpc]
+        public void UpdateGUIOnClients(List<GameState> enemyGameStates)
+        {
+            // PrintClientDataOfMatch();
+            GameObject.Find("EnemyBoxes").GetComponent<EnemyBoxes>().UpdateEnemySquares(enemyGameStates);
+        }
+
+        [TargetRpc]
+        void TargetSpawnAsteroid(bool success, string matchID, int playerIndex)
+        {
+            //TODO
+            GameObject.Find("AsteroidManager").GetComponent<AsteroidSpawner>().SpawnAttackAsteroid();
+        }
+
+        #endregion executedByServer
+
+        #endregion executedOnClient
+
+        // Methods executed on server
+        // #################################################################
+        #region executedOnServer
+
+        // public void PrintServerDataOfMatch()
+        // {
+        //     Debug.Log("#################");
+        //     Debug.Log("this: " + this);
+        //     Debug.Log("this.playerIndex: " + this.playerIndex);
+        //     Debug.Log("Players in match:");
+        //     foreach(Player p in this.currentMatch.players)
+        //     {
+        //         Debug.Log("-----");
+        //         Debug.Log("Player Index: " + p.playerIndex);
+        //         Debug.Log("Player Score: " + p.gameState.Score);
+        //         Debug.Log("-----");
+        //     }
+        //     Debug.Log("#################");
+        // }
+
+        public void UpdateGameStatesOnClients()
+        {
+            foreach(Player pl in MatchMaker.instance.getMatch(matchID).players)
+            {
+                List<GameState> gameStates = new List<GameState>();
+                foreach(Player p in MatchMaker.instance.getMatch(matchID).players)
+                {
+                    gameStates.Add(p.gameState);
+                }
+                for(int i=MatchMaker.instance.getMatch(matchID).players.Count; i<25; i++)
+                {
+                    gameStates.Add(new GameState(true, 0, 0)); // dummy gameState which is GameOver
+                }
+                gameStates.Remove(pl.gameState);
+                pl.UpdateGUIOnClients(gameStates);
+            }
+        }
+
+        [Command]
+        public void SetGameStateOnServer(bool GameOver, int HP, int Score)
+        {
+            GameState gs = new GameState(GameOver, HP, Score);
+            this.gameState = gs;
+            UpdateGameStatesOnClients();
+        }
+
         [Command]
         void CmdHostGame(string matchID)
         {
@@ -73,36 +197,16 @@ namespace Networking
                 Debug.Log($"<color=red>Failed to host game </color>");
                 TargetHostGame(false, matchID, playerIndex);
             }
-
         }
 
-        [TargetRpc]
-        void TargetHostGame(bool success, string matchID, int playerIndex)
-        {
-            this.playerIndex = playerIndex;
-            Debug.Log($"This MatchId: {matchID}");
-            UILobby.instance.HostSuccess(success, matchID);
-
-        }
-
-
-
-        public void JoinGame(string inputID)
-        {
-
-            CmdJoinGame(inputID);
-        }
-        // runs on server Version of Player
         [Command]
         void CmdJoinGame(string matchID)
         {
-
             this.matchID = matchID;
             if (MatchMaker.instance.JoinGame(matchID, this, out playerIndex))
             {
-
                 Debug.Log("Success Joining game " + matchID);
-                 playerLobbyUI = UILobby.instance.SpawnPlayerUIPrefab (this);
+                playerLobbyUI = UILobby.instance.SpawnPlayerUIPrefab (this);
                 networkMatchChecker.matchId = matchID.toGuid();
                 TargetJoinGame(true, matchID, playerIndex);
             }
@@ -111,52 +215,59 @@ namespace Networking
                 Debug.Log($"<color=red>Failed to Join game </color");
                 TargetJoinGame(false, matchID, playerIndex);
             }
-
         }
 
-        [TargetRpc]
-        void TargetJoinGame(bool success, string matchID, int playerIndex)
-        {
-            this.playerIndex = playerIndex;
-            this.matchID = matchID;
-            Debug.Log($"This MatchId: {matchID}");
-            UILobby.instance.JoinSuccess(success, matchID);
-
-        }
-
-        public void BeginGame()
-        {
-            CmdBeginGame();
-        }
-        // runs on server Version of Player
         [Command]
         void CmdBeginGame()
         {
             MatchMaker.instance.BeginGame(matchID);
             Debug.Log($"Starting Game");
-
         }
 
-        public void StartGame()
+        public void StartGame() // called by Server from MatchMaker - therefore runs on Server
         {
             TargetBeginGame();
-
         }
 
-
-        [TargetRpc]
-        void TargetBeginGame()
+        [Command]
+        void CmdSpawnAsteroid(Player targetPlayer)
         {
-            Debug.Log($"This MatchId: {matchID} | Starting Game");
-            //Additively LoadGameScene
-            SceneManager.LoadScene("Game", LoadSceneMode.Additive);
+            TargetSpawnAsteroid(true, matchID, targetPlayer.playerIndex);
         }
 
-        // Update is called once per frame
-        void Update()
-        {
+        #endregion executedOnServer
 
+        // #################################################################
+        #region ServerClientStartStop
+
+        public override void OnStartServer () {
+            netIDGuid = netId.ToString ().toGuid();
+            networkMatchChecker.matchId = netIDGuid;
         }
+
+
+        public override void OnStartClient () {
+            if (isLocalPlayer) {
+                localPlayer = this;
+            } else {
+                Debug.Log ($"Spawning other player UI Prefab");
+            }
+        }
+
+        public override void OnStopClient () {
+            Debug.Log ($"Client Stopped");
+            ClientDisconnect ();
+        }
+
+        public override void OnStopServer () {
+            Debug.Log ($"Client Stopped on Server");
+            ServerDisconnect ();
+        }
+
+        #endregion ServerClientStartStop
+
+        // #################################################################
+        #region disconnect
 
         /* 
             DISCONNECT
@@ -192,6 +303,10 @@ namespace Networking
             }
         }
 
+        #endregion disconnect
+
+        // #################################################################
+        #region matchPlayers
         /* 
             MATCH PLAYERS
         */
@@ -209,14 +324,13 @@ namespace Networking
                 UILobby.instance.SetStartButtonActive(false);
             }
         }
-        
-
         [TargetRpc]
-        public void TargetPlayerFillLobby (Player player) {
+        public void TargetPlayerFillLobby (Player player) 
+        {
             playerLobbyUI = UILobby.instance.SpawnPlayerUIPrefab (this);
-            }
-        
+        }
 
+        #endregion matchPlayers
 
     }
 }

@@ -33,7 +33,7 @@ public class GameHUD : MonoBehaviour
 
     public void UpdateScore(GameState gameState)
     {
-        scoreText.text = gameState.ToString();
+        scoreText.text = gameState.Score.ToString();
     }
 
     public void GameOver()
