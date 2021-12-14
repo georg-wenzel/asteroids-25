@@ -27,8 +27,14 @@ public class EnemyBoxes : MonoBehaviour
     {
         for(int i=0; i<gameStates.Count; i++)
         {
-            EnemySquare enemySquare = (EnemySquare)transform.GetChild(i).GetComponent(typeof(EnemySquare));
-            enemySquare.UpdateUI(gameStates[i]);
+            var childCount = transform.childCount;
+            if(childCount > i)
+            {
+                EnemySquare enemySquare = (EnemySquare) transform.GetChild(i).GetComponent(typeof(EnemySquare));
+                enemySquare.UpdateUI(gameStates[i]);
+                
+            }
+
         }
     }
 

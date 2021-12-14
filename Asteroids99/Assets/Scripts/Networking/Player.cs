@@ -158,19 +158,24 @@ namespace Networking
 
         public void UpdateGameStatesOnClients()
         {
-            foreach(Player pl in MatchMaker.instance.getMatch(matchID).players)
+            if (MatchMaker.instance.getMatch(matchID).players.Count > 1)
             {
-                List<GameState> gameStates = new List<GameState>();
-                foreach(Player p in MatchMaker.instance.getMatch(matchID).players)
+                foreach (Player pl in MatchMaker.instance.getMatch(matchID).players)
                 {
-                    gameStates.Add(p.gameState);
+                    List<GameState> gameStates = new List<GameState>();
+                    foreach (Player p in MatchMaker.instance.getMatch(matchID).players)
+                    {
+                        gameStates.Add(p.gameState);
+                    }
+
+                    for (int i = MatchMaker.instance.getMatch(matchID).players.Count; i < 25; i++)
+                    {
+                        gameStates.Add(new GameState(true, 0, 0)); // dummy gameState which is GameOver
+                    }
+
+                    gameStates.Remove(pl.gameState);
+                    pl.UpdateGUIOnClients(gameStates);
                 }
-                for(int i=MatchMaker.instance.getMatch(matchID).players.Count; i<25; i++)
-                {
-                    gameStates.Add(new GameState(true, 0, 0)); // dummy gameState which is GameOver
-                }
-                gameStates.Remove(pl.gameState);
-                pl.UpdateGUIOnClients(gameStates);
             }
         }
 
