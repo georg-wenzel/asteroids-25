@@ -17,6 +17,7 @@ namespace Networking
         [SyncVar] public string matchID;
         [SyncVar] public int playerIndex;
 
+        [SyncVar] public string playerName; 
         //[SyncVar] public Match currentMatch;
 
         [SyncVar] public GameState gameState;
@@ -60,9 +61,9 @@ namespace Networking
             CmdSpawnAsteroid(targetPlayer);
         }
 
-        public void JoinGame(string inputID)
+        public void JoinGame(string inputID, string name)
         {
-            CmdJoinGame(inputID);
+            CmdJoinGame(inputID, name);
         }
 
         public void BeginGame()
@@ -119,10 +120,10 @@ namespace Networking
         }
 
         [TargetRpc]
-        public void UpdateGUIOnClients(List<GameState> enemyGameStates)
+        public void UpdateGUIOnClients(List<GameState> enemyGameStates, List<string> enemyNames)
         {
             // PrintClientDataOfMatch();
-            GameObject.Find("EnemyBoxes").GetComponent<EnemyBoxes>().UpdateEnemySquares(enemyGameStates);
+            GameObject.Find("EnemyBoxes").GetComponent<EnemyBoxes>().UpdateEnemySquares(enemyGameStates, enemyNames);
         }
 
         [TargetRpc]
@@ -163,18 +164,23 @@ namespace Networking
                 foreach (Player pl in MatchMaker.instance.getMatch(matchID).players)
                 {
                     List<GameState> gameStates = new List<GameState>();
+                    List<string> playerNames = new List<string>();
                     foreach (Player p in MatchMaker.instance.getMatch(matchID).players)
                     {
                         gameStates.Add(p.gameState);
+                        playerNames.Add(p.playerName);
                     }
 
                     for (int i = MatchMaker.instance.getMatch(matchID).players.Count; i < 25; i++)
                     {
                         gameStates.Add(new GameState(true, 0, 0)); // dummy gameState which is GameOver
+                        playerNames.Add("Player " + i);
                     }
 
                     gameStates.Remove(pl.gameState);
-                    pl.UpdateGUIOnClients(gameStates);
+                    var index = playerNames.IndexOf(pl.playerName);
+                    playerNames.RemoveAt(index);
+                    pl.UpdateGUIOnClients(gameStates, playerNames);
                 }
             }
         }
@@ -205,13 +211,13 @@ namespace Networking
         }
 
         [Command]
-        void CmdJoinGame(string matchID)
+        void CmdJoinGame(string matchID, string name)
         {
             this.matchID = matchID;
+            this.playerName = name;
             if (MatchMaker.instance.JoinGame(matchID, this, out playerIndex))
             {
                 Debug.Log("Success Joining game " + matchID);
-                playerLobbyUI = UILobby.instance.SpawnPlayerUIPrefab (this);
                 networkMatchChecker.matchId = matchID.toGuid();
                 TargetJoinGame(true, matchID, playerIndex);
             }
@@ -256,6 +262,7 @@ namespace Networking
                 localPlayer = this;
             } else {
                 Debug.Log ($"Spawning other player UI Prefab");
+                playerLobbyUI = UILobby.instance.SpawnPlayerUIPrefab (this);
             }
         }
 
@@ -297,7 +304,6 @@ namespace Networking
         void RpcDisconnectGame () {
             ClientDisconnect ();
         }
-
         void ClientDisconnect () {
             if (playerLobbyUI != null) {
                 if (!isServer) {
@@ -328,11 +334,6 @@ namespace Networking
             } else {
                 UILobby.instance.SetStartButtonActive(false);
             }
-        }
-        [TargetRpc]
-        public void TargetPlayerFillLobby (Player player) 
-        {
-            playerLobbyUI = UILobby.instance.SpawnPlayerUIPrefab (this);
         }
 
         #endregion matchPlayers

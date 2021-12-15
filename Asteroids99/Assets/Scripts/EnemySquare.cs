@@ -44,9 +44,9 @@ public class EnemySquare : MonoBehaviour
     //     SetLocalPlayerOnClient(player);
     // }
 
-    public void UpdateUI(GameState gameState)
+    public void UpdateUI(GameState gameState, string name = "")
     {
-        // playerName.text = "Player_" + localPlayer.playerIndex.ToString(); // TODO: delete later
+        playerName.text = name;
         playerHP.SetText(gameState.HP.ToString());
         playerScore.SetText(gameState.Score.ToString());
         if(gameState.GameOver)

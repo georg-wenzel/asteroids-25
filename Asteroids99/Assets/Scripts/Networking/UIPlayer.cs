@@ -14,7 +14,7 @@ namespace Networking{
         {
             this.player = player;
             Debug.Log($"Set Player {player}");
-            text.text = "Player " + player.playerIndex.ToString();
+            text.text = player.playerName;
 
         }
     }

@@ -16,7 +16,10 @@ namespace Networking{
         [SerializeField] Button hostButton;
 
         [SerializeField] GameObject hostJoin;
+        [SerializeField] Canvas nameCanvas;
         [SerializeField] Canvas lobbyCanvas;
+        [SerializeField] GameObject giveName;
+        [SerializeField] TMP_InputField playerNameInput;
 
         [Header("Lobby")]
         [SerializeField] Transform UIPlayerParent;
@@ -28,7 +31,6 @@ namespace Networking{
 
         GameObject localPlayerLobbyUI;
 
-
         public void Host()
         {
             Debug.Log($"Player {Player.localPlayer}");
@@ -37,7 +39,7 @@ namespace Networking{
         }
         public void Join()
         {
-            Player.localPlayer.JoinGame(joinMatchInput.text);
+            Player.localPlayer.JoinGame(joinMatchInput.text, Player.localPlayer.playerName);
         }
         public void SetStartButtonActive (bool active) {
             startGameButton.SetActive (active);
@@ -90,6 +92,7 @@ namespace Networking{
         void Start()
         {
             instance = this;
+            instance.nameCanvas.enabled = true;
         }
 
         // Update is called once per frame
@@ -108,6 +111,17 @@ namespace Networking{
         public void BeginGame() 
         {
             Player.localPlayer.BeginGame();
+        }
+        
+        public void AfterUserNameInserted()
+        {
+            if(playerNameInput.text != "")
+            {
+                Player.localPlayer.playerName = playerNameInput.text;
+                instance.nameCanvas.enabled = false;
+                instance.hostJoin.SetActive(true);
+            }
+            
         }
     }
 }
