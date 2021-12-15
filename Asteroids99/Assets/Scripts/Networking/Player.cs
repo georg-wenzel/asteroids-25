@@ -50,10 +50,10 @@ namespace Networking
             SetGameStateOnServer(gameState.GameOver, gameState.HP, gameState.Score); // set GameState on Server
         }
 
-        public void HostGame()
+        public void HostGame(string name)
         {
             string matchID = MatchMaker.GetRandomMatchID();
-            CmdHostGame(matchID);
+            CmdHostGame(matchID, name);
         }
 
         public void SpawnAttackAsteroid(Player targetPlayer)
@@ -194,9 +194,10 @@ namespace Networking
         }
 
         [Command]
-        void CmdHostGame(string matchID)
+        void CmdHostGame(string matchID, string name)
         {
             this.matchID = matchID;
+            this.playerName = name;
             if (MatchMaker.instance.HostGame(matchID, this, out playerIndex))
             {
                 Debug.Log("Success Hosting game " + matchID);
