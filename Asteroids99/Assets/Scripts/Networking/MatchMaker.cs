@@ -77,7 +77,7 @@ namespace Networking
                 player.matchID = matchID;
                 Debug.Log ($"Match generated");
                 Debug.Log($"Match: {matchID} added");
-                playerIndex = 1;
+                playerIndex = 0;
                 player.playerIndex = playerIndex;
                 return true;
             }
@@ -97,14 +97,10 @@ namespace Networking
                 {
                     if (matches[i].matchID == matchID)
                     {
-                        foreach(Player p in matches[i].players)
-                        {
-                            player.TargetPlayerFillLobby(p);
-                        }
                         matches[i].AddPlayer(player);
                         // player.currentMatch = matches[i];
                         player.matchID = matchID;
-                        Debug.Log($"Player {player.name} joined match {matchID}");
+                        Debug.Log($"Player {player.playerName} joined match {matchID}");
                         playerIndex = matches[i].GetPlayers().Count;
                         player.playerIndex = playerIndex;
                         matches[i].players[0].PlayerCountUpdated (matches[i].players.Count);

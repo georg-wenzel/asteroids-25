@@ -16,14 +16,16 @@ public class EnemyBoxes : MonoBehaviour
     void Start()
     {
         List<GameState> gameStates = new List<GameState>();
+        List<string> playerNames = new List<string>();
         for(int i=0; i<25; i++)
         {
             gameStates.Add(new GameState(false, 3, 0));
+            playerNames.Add("Player " + i);
         }
-        UpdateEnemySquares(gameStates);
+        UpdateEnemySquares(gameStates,playerNames);
     }
 
-    public void UpdateEnemySquares(List<GameState> gameStates)
+    public void UpdateEnemySquares(List<GameState> gameStates, List<string> playerNames)
     {
         for(int i=0; i<gameStates.Count; i++)
         {
@@ -31,7 +33,7 @@ public class EnemyBoxes : MonoBehaviour
             if(childCount > i)
             {
                 EnemySquare enemySquare = (EnemySquare) transform.GetChild(i).GetComponent(typeof(EnemySquare));
-                enemySquare.UpdateUI(gameStates[i]);
+                enemySquare.UpdateUI(gameStates[i], playerNames[i]);
                 
             }
 
