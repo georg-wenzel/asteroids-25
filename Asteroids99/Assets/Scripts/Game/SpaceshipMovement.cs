@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Script for controlling Spaceship Movement
@@ -12,6 +13,7 @@ public class SpaceshipMovement : MonoBehaviour
     /// The current velocity of the spaceship (in screen dimensions)
     /// </summary>
     private Vector2 velocity;
+    private PlayerInput input;
     #endregion
 
     #region properties
@@ -33,7 +35,8 @@ public class SpaceshipMovement : MonoBehaviour
     void Start()
     {
         //set the initial velocity to 0
-        this.velocity = new Vector2(0, 0);
+        velocity = new Vector2(0,0);
+        input = this.GetComponent<PlayerInput>();
     }
 
     void FixedUpdate()
@@ -46,26 +49,9 @@ public class SpaceshipMovement : MonoBehaviour
                                 (new_velocity.y * velocity.y > 0) ? new_velocity.y : 0);
 
 
-        //each frame, we calculate rotation degrees and a movement vector (towards or away from the major axis of the spaceship) based on keyboard input
-        Vector2 movementVector = new Vector2(0, 0);
-        float rotationDegrees = 0;
-
-        if(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
-        {
-            movementVector += new Vector2(transform.up.x, transform.up.y);
-        }
-        if(Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
-        {
-            movementVector -= new Vector2(transform.up.x, transform.up.y);
-        }
-        if(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
-        {
-            rotationDegrees -= 8f;
-        }
-        if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
-        {
-            rotationDegrees += 8f;
-        }
+        Vector2 inputVector = input.actions["Move"].ReadValue<Vector2>();
+        Vector2 movementVector = new Vector2(transform.up.x * inputVector.y, transform.up.y * inputVector.y);
+        float rotationDegrees = -inputVector.x * 8f;
 
         //update the velocity, clamping it to a maximum magnitude (max speed is the same in multiple dimensions as in one)
         this.velocity = Vector2.ClampMagnitude(this.velocity + movementVector * translationSpeed * 0.025f, 0.75f);

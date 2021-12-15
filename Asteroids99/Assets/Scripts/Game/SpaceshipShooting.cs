@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Script which controls shooting of the missiles
@@ -8,10 +9,11 @@ using UnityEngine;
 public class SpaceshipShooting : MonoBehaviour
 {
     #region fields
-    /// <summary>
-    /// The remaining cooldown until another missile can be fired
+    /// The player input
     /// </summary>
-    private float cooldown = 0.0f;
+    private PlayerInput input;
+    //Coroutine when the space button is held
+    private Coroutine holdFire;
     #endregion
 
     #region properties
@@ -22,20 +24,32 @@ public class SpaceshipShooting : MonoBehaviour
     #endregion
 
     #region methods
-    void Update()
+    private void Start()
     {
-        //Fire on spacebar press/hold if 0.2 or more seconds have passed since the last shot
-        if(Input.GetKey(KeyCode.Space))
-        {
-            if(cooldown <= 0.0f)
-            {
-                Fire();
-                cooldown = 0.2f;
-            }
-        }
+        input = this.GetComponent<PlayerInput>();
+        input.actions["Fire"].started += SpaceshipShooting_started;
+        input.actions["fire"].canceled += SpaceshipShooting_canceled;
+    }
 
-        if (cooldown > 0.0f)
-            cooldown -= Time.deltaTime;
+    private void SpaceshipShooting_canceled(InputAction.CallbackContext obj)
+    {
+        StopCoroutine(holdFire);
+    }
+
+    private void SpaceshipShooting_started(InputAction.CallbackContext obj)
+    {
+        Fire();
+        holdFire = StartCoroutine(HoldFire());
+    }
+
+    private IEnumerator HoldFire()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(0.2f);
+            Fire();
+        }
+            
     }
 
     private void Fire()
