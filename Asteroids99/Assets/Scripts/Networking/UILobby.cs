@@ -33,8 +33,8 @@ namespace Networking{
 
         public void Host()
         {
-            Debug.Log($"Player {Player.localPlayer}");
-            Player.localPlayer.HostGame();
+            Debug.Log($"Player {Player.localPlayer} is hosting, Playername = {Player.localPlayer.playerName}");
+            Player.localPlayer.HostGame(Player.localPlayer.playerName);
 
         }
         public void Join()
