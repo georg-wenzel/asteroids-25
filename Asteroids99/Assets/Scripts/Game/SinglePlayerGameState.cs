@@ -38,13 +38,18 @@ public class SinglePlayerGameState : MonoBehaviour, IHPObserver, IAsteroidDeathO
     public void UpdateHP(int hp)
     {
         this.PlayerGameState.HP = hp;
-        if (this.PlayerGameState.HP == 0)
+        //If we just went game over, update the game state, and show the game over hud
+        if (this.PlayerGameState.HP == 0 && !this.PlayerGameState.GameOver)
         {
             this.PlayerGameState.GameOver = true;
             HUD.GameOver();
+            Player.localPlayer.SetGameState(this.PlayerGameState);
         }
-        HUD.UpdateHP(this.PlayerGameState);
-        Player.localPlayer.SetGameState(this.PlayerGameState);
+        //else, only update if the player is still above 0 HP (if the player has been game over, do not update the local game state)
+        else if (this.PlayerGameState.HP > 0)
+        {
+            Player.localPlayer.SetGameState(this.PlayerGameState);
+        }
     }
 
     /// <summary>
