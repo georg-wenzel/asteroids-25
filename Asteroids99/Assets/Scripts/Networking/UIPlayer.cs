@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Networking{
     public class UIPlayer : MonoBehaviour
     {
-        [SerializeField] public Text text;
+        [SerializeField] public TMP_Text text;
         Player player;
         // Start is called before the first frame update
 

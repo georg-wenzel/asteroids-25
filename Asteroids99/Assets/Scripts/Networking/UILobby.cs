@@ -16,9 +16,8 @@ namespace Networking{
         [SerializeField] Button hostButton;
 
         [SerializeField] GameObject hostJoin;
-        [SerializeField] Canvas nameCanvas;
-        [SerializeField] Canvas lobbyCanvas;
-        [SerializeField] GameObject giveName;
+        [SerializeField] GameObject namePanel;
+        [SerializeField] GameObject lobbyPanel;
         [SerializeField] TMP_InputField playerNameInput;
 
         [Header("Lobby")]
@@ -48,7 +47,7 @@ namespace Networking{
             if (localPlayerLobbyUI != null) Destroy (localPlayerLobbyUI);
             Player.localPlayer.DisconnectGame ();
 
-            lobbyCanvas.enabled = false;
+            lobbyPanel.SetActive(false);
         }
 
         public void JoinSuccess(bool success, string matchID)
@@ -58,7 +57,7 @@ namespace Networking{
                 hostJoin.SetActive(true);
             } else {
                 hostJoin.SetActive(false);
-                lobbyCanvas.enabled = true;
+                lobbyPanel.SetActive(true);
                 if (localPlayerLobbyUI != null) Destroy (localPlayerLobbyUI);
                 localPlayerLobbyUI = SpawnPlayerUIPrefab (Player.localPlayer);
                 matchIDText.text = matchID;
@@ -71,7 +70,7 @@ namespace Networking{
                 hostJoin.SetActive(true);
             } else {
                 hostJoin.SetActive(false);
-                lobbyCanvas.enabled = true;
+                lobbyPanel.SetActive(true);
                 if (localPlayerLobbyUI != null) Destroy (localPlayerLobbyUI);
                 localPlayerLobbyUI = SpawnPlayerUIPrefab (Player.localPlayer);
                 matchIDText.text = matchID;
@@ -84,7 +83,7 @@ namespace Networking{
             Debug.Log("UI Lobby Start Success");
             hostJoin.SetActive(false);
             startGameButton.SetActive(false);
-            lobbyCanvas.enabled = false;
+            lobbyPanel.SetActive(false);
             localPlayerLobbyUI.SetActive(false);
         }
 
@@ -92,7 +91,7 @@ namespace Networking{
         void Start()
         {
             instance = this;
-            instance.nameCanvas.enabled = true;
+            instance.namePanel.SetActive(true);
         }
 
         // Update is called once per frame
@@ -118,7 +117,7 @@ namespace Networking{
             if(playerNameInput.text != "")
             {
                 Player.localPlayer.playerName = playerNameInput.text;
-                instance.nameCanvas.enabled = false;
+                instance.namePanel.SetActive(false);
                 instance.hostJoin.SetActive(true);
             }
             
