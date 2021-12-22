@@ -27,13 +27,19 @@ public class MissileLogic : MonoBehaviour
     /// The Game Object to play a local audio clip.
     /// </summary>
     public GameObject LocalAudioPrefab;
+    /// <summary>
+    /// Get the velocity direction of this missile
+    /// </summary>
+    public Vector2 MovementDirection { get; private set; }
     #endregion
 
     #region methods
     void Start()
     {
         //Apply movement force in the direction the missile is facing.
-        GetComponent<Rigidbody2D>().AddForce(new Vector2(transform.up.x, transform.up.y) * 0.3f * Speed);
+        var rigidbody2d = GetComponent<Rigidbody2D>();
+        rigidbody2d.AddForce(new Vector2(transform.up.x, transform.up.y) * 0.3f * Speed);
+        MovementDirection = new Vector2(transform.up.x, transform.up.y);
 
         bounds = GameObject.Find("GameView").GetComponent<GameBoundaries>();
 

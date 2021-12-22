@@ -29,6 +29,10 @@ public class BaseAsteroidBehaviour : MonoBehaviour, IAsteroidDeathObservable
     private GameBoundaries bounds;
     //all observers of this asteroid's death
     private HashSet<IAsteroidDeathObserver> observers;
+    /// <summary>
+    /// The particle system when an asteroid gets hit
+    /// </summary>
+    private ParticleSystem hitParticles;
     #endregion
 
     #region properties
@@ -57,8 +61,9 @@ public class BaseAsteroidBehaviour : MonoBehaviour, IAsteroidDeathObservable
         //get components of this game object
         rigidbody2d = GetComponent<Rigidbody2D>();
         properties = GetComponent<AsteroidProperties>();
+        hitParticles = GetComponent<ParticleSystem>();
 
-        Vector2 direction;
+Vector2 direction;
         //if no direction is given in the properties
         if (properties.InitialMovementDirection.magnitude > 0)
             //use this vector
@@ -120,6 +125,12 @@ public class BaseAsteroidBehaviour : MonoBehaviour, IAsteroidDeathObservable
             else
             {
                 go.GetComponent<LocalAudioScript>().Clip = Hit;
+                var missileDirection = collision.collider.gameObject.GetComponent<MissileLogic>().MovementDirection;
+                var collisionAngle = Vector2.SignedAngle(new Vector3(1,0), new Vector2(-missileDirection.x, -missileDirection.y));
+                var shape = hitParticles.shape;
+                //30 is half the angle of the cone in which particles can spawn in the particle system
+                shape.rotation = new Vector3(0, 0, collisionAngle - transform.rotation.eulerAngles.z - 30);
+                hitParticles.Play();
             }
         }
     }

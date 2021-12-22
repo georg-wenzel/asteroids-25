@@ -30,7 +30,7 @@ public class AsteroidSpawner : MonoBehaviour, IAsteroidDeathObserver
     /// <summary>
     /// The maximum number of asteroids which can be active at once.
     /// </summary>
-    public int MaxAsteroids = 20;
+    public int MaxAsteroids = 3;
 
     /// <summary>
     /// A list of additional observers which the AsteroidSpawner injects into every Asteroid.
@@ -105,7 +105,7 @@ public class AsteroidSpawner : MonoBehaviour, IAsteroidDeathObserver
             {
                 builder.Reset();
                 //1 in 5 chance to build a large asteroid
-                if (Random.Range(0, 10) < 2) builder.BuildLarge();
+                if (Random.Range(0, 10) < 10) builder.BuildLarge();
                 SpawnAndInjectObservers();
             }
             yield return new WaitForSeconds(0.5f);
