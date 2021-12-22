@@ -16,6 +16,7 @@ public class AsteroidBuilder : MonoBehaviour
     private int initialScale;
     private float initialSpeed;
     private Color color;
+    private bool isFriendly;
     private Vector2 initialSpawn;
     private Vector2 targetDirection;
     #endregion
@@ -47,6 +48,7 @@ public class AsteroidBuilder : MonoBehaviour
         initialHealth = 1;
         initialScale = 1;
         initialSpeed = 1;
+        isFriendly = false;
         color = new Color(1, 1, 1, 1);
 
         //==================== SPAWN THE METEOR OUTSIDE THE ARENA, TOWARDS A TARGET POINT INSIDE OF IT ====================
@@ -98,6 +100,12 @@ public class AsteroidBuilder : MonoBehaviour
             go.AddComponent(System.Type.GetType(scriptName));
         }
 
+        if(isFriendly)
+        {
+            //Friendly asteroid collision layer
+            go.layer = 10;
+        }
+
         props.GetComponent<SpriteRenderer>().color = color;
         return go;
     }
@@ -119,6 +127,40 @@ public class AsteroidBuilder : MonoBehaviour
         color = new Color(1, 0.3f, 0.3f, 1);
         initialSpeed *= 2f;
         scriptsToAttach.Add("AttackAsteroidBehaviour");
+    }
+
+    /// <summary>
+    /// Build an asteroid which can move from one edge of the screen to another
+    /// </summary>
+    public void BuildPersistent()
+    {
+        scriptsToAttach.Add("BoundaryTeleport");
+    }
+
+    /// <summary>
+    /// Build a friendly asteroid
+    /// </summary>
+    public void BuildFriendly()
+    {
+        isFriendly = true;
+        color = new Color(0.3f, 1f, 0.3f, 1);
+    }
+
+    /// <summary>
+    /// Build an asteroid with a specific target velocity direction (relative to its spawn)
+    /// <param name="direction">The target direction of the asteroid</param>
+    public void BuildTargeted(Vector2 direction)
+    {
+        this.targetDirection = direction;
+    }
+
+    /// <summary>
+    /// Build an asteroid which spawns at the specified point
+    /// </summary>
+    /// <param name="spawn">The specified point for the asteroid to spawn</param>
+    public void BuildSpecificSpawn(Vector2 spawn)
+    {
+        this.initialSpawn = spawn;
     }
     #endregion
 }
