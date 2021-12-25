@@ -20,7 +20,7 @@ public class SpaceshipHealthManager : MonoBehaviour, IHPObservable
     /// <summary>
     /// The time in seconds the spaceship has active iframes
     /// </summary>
-    private float iframes;
+    private bool iframes;
     #endregion
 
     #region properties
@@ -43,20 +43,9 @@ public class SpaceshipHealthManager : MonoBehaviour, IHPObservable
     void Start()
     {
         this.hp = 3;
-        this.iframes = 0;
+        this.iframes = false;
     }
-    
-    void Update()
-    {
-        //reduce iframes if they are > 0
-        if (iframes > 0.0f)
-        {
-            iframes -= Time.deltaTime;
-            if (iframes <= 0.0f)
-                EndInvulnerability();
-        }
-    }
-
+ 
     /// <summary>
     /// Add a HP observer
     /// </summary>
@@ -88,8 +77,11 @@ public class SpaceshipHealthManager : MonoBehaviour, IHPObservable
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag.Equals("Asteroid") && iframes == 0)
+        if(collision.gameObject.tag.Equals("Asteroid") && !iframes)
         {
+            //start invulnerability
+            StartCoroutine(InvulnerabilityFrames());
+
             //play hit audio
             GameObject go = GameObject.Instantiate(LocalAudioPrefab);
             go.transform.position = this.transform.position;
@@ -99,22 +91,27 @@ public class SpaceshipHealthManager : MonoBehaviour, IHPObservable
             if (this.hp > 0)
                 this.hp -= 1;
             notifyAll();
-
-            //start invulnerability
-            StartInvulnerability();
         }
+    }
+
+    IEnumerator InvulnerabilityFrames()
+    {
+        StartInvulnerability();
+        yield return new WaitForSeconds(1f);
+        EndInvulnerability();
+        
     }
 
     private void StartInvulnerability()
     {
-        this.iframes = 1.0f;
+        this.iframes = true;
         this.GetComponent<SpriteRenderer>().color -= new Color(0, 0, 0, 0.5f);
     }
 
     private void EndInvulnerability()
     {
         this.GetComponent<SpriteRenderer>().color += new Color(0, 0, 0, 0.5f);
-        iframes = 0;
+        this.iframes = false;
     }
     #endregion
 }

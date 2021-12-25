@@ -26,7 +26,7 @@ public class BoundaryTeleport : MonoBehaviour
     {
         OnBorderContact, OnLeavesGameSpace
     }
-    public BoundaryDetectionMethod DetectionType;
+    public BoundaryDetectionMethod DetectionType = BoundaryDetectionMethod.OnLeavesGameSpace;
     #endregion
 
     #region methods

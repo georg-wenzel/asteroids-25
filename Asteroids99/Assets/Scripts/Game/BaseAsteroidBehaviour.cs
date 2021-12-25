@@ -29,6 +29,10 @@ public class BaseAsteroidBehaviour : MonoBehaviour, IAsteroidDeathObservable
     private GameBoundaries bounds;
     //all observers of this asteroid's death
     private HashSet<IAsteroidDeathObserver> observers;
+    /// <summary>
+    /// The particle system when an asteroid gets hit
+    /// </summary>
+    private ParticleSystem hitParticles;
     #endregion
 
     #region properties
@@ -44,6 +48,10 @@ public class BaseAsteroidBehaviour : MonoBehaviour, IAsteroidDeathObservable
     /// The Game Object to play a local audio clip.
     /// </summary>
     public GameObject LocalAudioPrefab;
+    /// <summary>
+    /// A vector which stores the direction of impact for observers to read before death (this is 0/0 until the asteroid is hit by a missile which destroys it)
+    /// </summary>
+    public Vector2 ImpactDirection { get; private set; }
     #endregion
 
     #region methods
@@ -57,6 +65,7 @@ public class BaseAsteroidBehaviour : MonoBehaviour, IAsteroidDeathObservable
         //get components of this game object
         rigidbody2d = GetComponent<Rigidbody2D>();
         properties = GetComponent<AsteroidProperties>();
+        hitParticles = GetComponent<ParticleSystem>();
 
         Vector2 direction;
         //if no direction is given in the properties
@@ -70,6 +79,9 @@ public class BaseAsteroidBehaviour : MonoBehaviour, IAsteroidDeathObservable
         //add the initial force and store the desired magnitude of velocity
         rigidbody2d.AddForce(direction * properties.Speed, ForceMode2D.Impulse);
         velocityMagnitude = rigidbody2d.velocity.magnitude;
+
+        //Set a default value for the impact direction
+        ImpactDirection = new Vector2(0, 0);
 
         //add a small random spin to the asteroid
         rigidbody2d.AddTorque(Random.Range(0.0f,5.0f));
@@ -111,15 +123,37 @@ public class BaseAsteroidBehaviour : MonoBehaviour, IAsteroidDeathObservable
             GameObject go = GameObject.Instantiate(LocalAudioPrefab);
             go.transform.position = this.transform.position;
 
+            var missileDirection = collision.collider.gameObject.GetComponent<MissileLogic>().MovementDirection;
+
             health--;
             if (health == 0)
             {
-                go.GetComponent<LocalAudioScript>().Clip = Explosion;
+                var script = go.GetComponent<LocalAudioScript>();
+                script.Clip = Explosion;
+                script.ParticleSystem = true;
+                //If the asteroid was large
+                if(this.transform.localScale.x > 1)
+                {
+                    //Spawn large particle system
+                    script.Particles = 1000;
+                }    
+                else
+                {
+                    //Spawn small particle system
+                    script.Particles = 100;
+                }
+                //Set the impact vector
+                this.ImpactDirection = missileDirection;
                 Destroy(this.gameObject);
             }
             else
             {
                 go.GetComponent<LocalAudioScript>().Clip = Hit;
+                var collisionAngle = Vector2.SignedAngle(new Vector3(1,0), new Vector2(-missileDirection.x, -missileDirection.y));
+                var shape = hitParticles.shape;
+                //30 is half the angle of the cone in which particles can spawn in the particle system
+                shape.rotation = new Vector3(0, 0, collisionAngle - transform.rotation.eulerAngles.z - 30);
+                hitParticles.Play();
             }
         }
     }

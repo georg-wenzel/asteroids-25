@@ -67,6 +67,7 @@ public class AsteroidSpawner : MonoBehaviour, IAsteroidDeathObserver
     {
         builder.Reset();
         builder.BuildAttack();
+        builder.BuildPersistent();
         SpawnAndInjectObservers();
     }
 
@@ -91,7 +92,26 @@ public class AsteroidSpawner : MonoBehaviour, IAsteroidDeathObserver
     /// <param name="asteroid">The asteroid that died</param>
     public void NotifyDeath(GameObject asteroid)
     {
+        //Decrease asteroid count
         asteroid_count--;
+
+        //If it was a large asteroid
+        if(asteroid.transform.localScale.x > 1)
+        {
+            //1 in 3 chance to spawn an attack asteroid
+            if(Random.Range(0,3) == 0)
+            {
+                //build and spawn a friendly asteroid aiming towards the missile impact direction
+                builder.Reset();
+                builder.BuildFriendly();
+                builder.BuildTargeted(asteroid.GetComponent<BaseAsteroidBehaviour>().ImpactDirection);
+                builder.BuildSpecificSpawn(asteroid.transform.position);
+                //Spawn this asteroid without injecting death observers, as it does not interact like usual asteroids
+                GameObject go = builder.Spawn();
+                //Give this asteroid the "FriendlyAsteroid" tag to make it easier to identify downstream
+                go.tag = "FriendlyAsteroid";
+            }
+        }
     }
 
     /// <summary>
@@ -106,6 +126,7 @@ public class AsteroidSpawner : MonoBehaviour, IAsteroidDeathObserver
                 builder.Reset();
                 //1 in 5 chance to build a large asteroid
                 if (Random.Range(0, 10) < 2) builder.BuildLarge();
+                builder.BuildPersistent();
                 SpawnAndInjectObservers();
             }
             yield return new WaitForSeconds(0.5f);
