@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;
+using System.Linq;
 
 namespace Networking
 {
@@ -56,9 +57,9 @@ namespace Networking
             CmdHostGame(matchID, name);
         }
 
-        public void SpawnAttackAsteroid(Player targetPlayer)
+        public void SpawnAttackAsteroid(int targetPlayerIndex)
         {
-            CmdSpawnAsteroid(targetPlayer);
+            CmdSpawnAsteroid(targetPlayerIndex);
         }
 
         public void JoinGame(string inputID, string name)
@@ -120,16 +121,29 @@ namespace Networking
         }
 
         [TargetRpc]
-        public void UpdateGUIOnClients(List<GameState> enemyGameStates, List<string> enemyNames)
+        public void UpdateGUIOnClients(List<GameState> enemyGameStates, List<string> enemyNames, List<int> playerIndices)
         {
             // PrintClientDataOfMatch();
-            GameObject.Find("EnemyBoxes").GetComponent<EnemyBoxes>().UpdateEnemySquares(enemyGameStates, enemyNames);
+            GameObject.Find("EnemyBoxes").GetComponent<EnemyBoxes>().UpdateEnemySquares(enemyGameStates, enemyNames, playerIndices);
+            bool allEnemiesGameOver = true;
+            foreach(GameState gs in enemyGameStates)
+            {
+                if (!gs.GameOver)
+                {
+                    allEnemiesGameOver = false;
+                    break;
+                }
+            }
+            if(allEnemiesGameOver)
+            {
+                GameObject.Find("HUD").GetComponent<GameHUD>().GameWon();
+            }
         }
 
         [TargetRpc]
-        void TargetSpawnAsteroid(bool success, string matchID, int playerIndex)
+        void TargetSpawnAsteroid()
         {
-            //TODO
+            Debug.Log("Enemy spawned an AttackAsteroid on this player");
             GameObject.Find("AsteroidManager").GetComponent<AsteroidSpawner>().SpawnAttackAsteroid();
         }
 
@@ -165,22 +179,26 @@ namespace Networking
                 {
                     List<GameState> gameStates = new List<GameState>();
                     List<string> playerNames = new List<string>();
+                    List<int> playerIndices = new List<int>();
                     foreach (Player p in MatchMaker.instance.getMatch(matchID).players)
                     {
                         gameStates.Add(p.gameState);
                         playerNames.Add(p.playerName);
+                        playerIndices.Add(p.playerIndex);
                     }
 
                     for (int i = MatchMaker.instance.getMatch(matchID).players.Count; i < 25; i++)
                     {
                         gameStates.Add(new GameState(true, 0, 0)); // dummy gameState which is GameOver
                         playerNames.Add("Player " + i);
+                        playerIndices.Add(playerIndices.Last() + 1);
                     }
 
                     gameStates.Remove(pl.gameState);
                     var index = playerNames.IndexOf(pl.playerName);
                     playerNames.RemoveAt(index);
-                    pl.UpdateGUIOnClients(gameStates, playerNames);
+                    playerIndices.Remove(pl.playerIndex);
+                    pl.UpdateGUIOnClients(gameStates, playerNames, playerIndices);
                 }
             }
         }
@@ -242,9 +260,16 @@ namespace Networking
         }
 
         [Command]
-        void CmdSpawnAsteroid(Player targetPlayer)
+        void CmdSpawnAsteroid(int targetPlayerIndex)
         {
-            TargetSpawnAsteroid(true, matchID, targetPlayer.playerIndex);
+            foreach (Player p in MatchMaker.instance.getMatch(matchID).players)
+            {
+                if (p.playerIndex == targetPlayerIndex)
+                {
+                    p.TargetSpawnAsteroid();
+                    break;
+                }
+            }
         }
 
         #endregion executedOnServer
