@@ -77,7 +77,7 @@ namespace Networking
                 player.matchID = matchID;
                 Debug.Log ($"Match generated");
                 Debug.Log($"Match: {matchID} added");
-                playerIndex = 0;
+                playerIndex = 1;
                 player.playerIndex = playerIndex;
                 return true;
             }

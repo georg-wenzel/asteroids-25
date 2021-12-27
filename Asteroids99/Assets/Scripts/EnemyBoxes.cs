@@ -17,15 +17,17 @@ public class EnemyBoxes : MonoBehaviour
     {
         List<GameState> gameStates = new List<GameState>();
         List<string> playerNames = new List<string>();
+        List<int> playerIndices = new List<int>();
         for(int i=0; i<25; i++)
         {
             gameStates.Add(new GameState(false, 3, 0));
             playerNames.Add("Player " + i);
+            playerIndices.Add(i);
         }
-        UpdateEnemySquares(gameStates,playerNames);
+        UpdateEnemySquares(gameStates,playerNames,playerIndices);
     }
 
-    public void UpdateEnemySquares(List<GameState> gameStates, List<string> playerNames)
+    public void UpdateEnemySquares(List<GameState> gameStates, List<string> playerNames, List<int> playerIndices)
     {
         for(int i=0; i<gameStates.Count; i++)
         {
@@ -33,52 +35,21 @@ public class EnemyBoxes : MonoBehaviour
             if(childCount > i)
             {
                 EnemySquare enemySquare = (EnemySquare) transform.GetChild(i).GetComponent(typeof(EnemySquare));
+                enemySquare.playerIndex = playerIndices[i];
                 enemySquare.UpdateUI(gameStates[i], playerNames[i]);
-                
             }
 
         }
     }
 
-    /*
-        Set localPlayer in EnemyBoxes.
-        Get all EnemyPlayers.
-        Asssign each enemyPlayer to an EnemySquare.
-    */
-    // public void InitializeEnemyBoxes()
-    // {
-    //     Match match = Player.localPlayer.currentMatch;
-    //     Player localPlayer;
-    //     List<Player> enemyPlayers = new List<Player>();
-    //     foreach (Player pl in match.players)
-    //     {
-    //         if(pl == Player.localPlayer)
-    //         {
-    //             localPlayer = pl;
-    //         }
-    //         else
-    //         {
-    //             Debug.Log("Added enemy player " + pl);
-    //             enemyPlayers.Add(pl);
-    //         }
-    //     }
-    //     if (enemyPlayers.Count > 24)
-    //     {
-    //         return;
-    //     }
-    //     for(int i=0; i<enemyPlayers.Count; i++)
-    //     {
-    //         EnemySquare enemySquare = (EnemySquare)transform.GetChild(i).GetComponent(typeof(EnemySquare));
-    //         enemySquare.localPlayer = enemyPlayers[i];
-    //         Debug.Log(enemyPlayers[i] + " has HP " + enemyPlayers[i].gameState.HP);
-    //         enemySquare.UpdateUI();
-    //     } 
-    // }
-
     public void SpawnAsteroidOnOtherPlayer(EnemySquare sourceSquare)
     {
+        if(!sourceSquare.isGameOver)
+        {
+            Player.localPlayer.SpawnAttackAsteroid(sourceSquare.playerIndex);
+        }
         EnemySquare destination = GetRandomNeighbourSquare(sourceSquare);
-        Player.localPlayer.SpawnAttackAsteroid(destination.localPlayer);
+        Player.localPlayer.SpawnAttackAsteroid(destination.playerIndex);
     }
 
     public EnemySquare GetRandomNeighbourSquare(EnemySquare enemySquare)
@@ -116,7 +87,7 @@ public class EnemyBoxes : MonoBehaviour
         else
         {
             nextNeighbour = allEnemySquares[currentSquareIndex+1];
-            if(nextNeighbour.currentGameState.GameOver)
+            if(nextNeighbour.isGameOver)
                 return getNextEnemenySquare(currentSquareIndex+1, allEnemySquares);
         }
         return nextNeighbour;
@@ -130,7 +101,7 @@ public class EnemyBoxes : MonoBehaviour
         else
         {
             prevNeighbour = allEnemySquares[currentSquareIndex-1];
-            if(prevNeighbour.currentGameState.GameOver)
+            if(prevNeighbour.isGameOver)
                 return getPrevEnemenySquare(currentSquareIndex-1, allEnemySquares);
         }
         return prevNeighbour;
