@@ -23,6 +23,12 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("MultiplayerConnect");
     }
 
+    public void ShowLeaderboard()
+    {
+        // Load some Scene
+        SceneManager.LoadScene("Leaderboard");
+    }
+
     public void QuitGame()
     {
         Application.Quit();
