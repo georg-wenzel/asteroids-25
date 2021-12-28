@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;
 using System.Linq;
+using Utils;
 
 namespace Networking
 {
@@ -74,10 +75,10 @@ namespace Networking
 
         public void PrintClientDataOfMatch()
         {
-            Debug.Log("#################");
-            Debug.Log("this: " + this);
-            Debug.Log("this.playerIndex: " + this.playerIndex);
-            Debug.Log("Players in match:");
+            this.LogLog("#################");
+            this.LogLog("this: " + this);
+            this.LogLog("this.playerIndex: " + this.playerIndex);
+            this.LogLog("Players in match:");
             // foreach(Player p in this.currentMatch.players)
             // {
             //     Debug.Log("-----");
@@ -85,7 +86,7 @@ namespace Networking
             //     Debug.Log("Player Score: " + p.gameState.Score);
             //     Debug.Log("-----");
             // }
-            Debug.Log("#################");
+            this.LogLog("#################");
         }
 
         #endregion executedByClient
@@ -96,7 +97,7 @@ namespace Networking
         void TargetHostGame(bool success, string matchID, int playerIndex)
         {
             //localPlayer.playerIndex = playerIndex;
-            Debug.Log($"This MatchId: {matchID}");
+            this.LogLog($"This MatchId: {matchID}");
             UILobby.instance.HostSuccess(success, matchID);
         }
 
@@ -105,19 +106,19 @@ namespace Networking
         {
             //localPlayer.playerIndex = playerIndex;
             //localPlayer.matchID = matchID;
-            Debug.Log($"This MatchId: {matchID}");
+            this.LogLog($"This MatchId: {matchID}");
             UILobby.instance.JoinSuccess(success, matchID);
         }
 
         [TargetRpc]
         void TargetBeginGame()
         {
-            Debug.Log($"This MatchId: {matchID} | Starting Game");
+            this.LogLog($"This MatchId: {matchID} | Starting Game");
             //Additively LoadGameScene
             NetworkHelper helper = new GameObject("NetworkHelper").AddComponent<NetworkHelper>();
             StartCoroutine(helper.LoadSceneEnumerator("OnlineGameScene"));
             UILobby.instance.startSuccess();
-            Debug.Log("Loaded Game");
+            this.LogLog("Loaded Game");
         }
 
         [TargetRpc]
@@ -143,7 +144,7 @@ namespace Networking
         [TargetRpc]
         void TargetSpawnAsteroid()
         {
-            Debug.Log("Enemy spawned an AttackAsteroid on this player");
+            this.LogLog("Enemy spawned an AttackAsteroid on this player");
             GameObject.Find("AsteroidManager").GetComponent<AsteroidSpawner>().SpawnAttackAsteroid();
         }
 
@@ -218,13 +219,13 @@ namespace Networking
             this.playerName = name;
             if (MatchMaker.instance.HostGame(matchID, this, out playerIndex))
             {
-                Debug.Log("Success Hosting game " + matchID);
+                this.LogLog("Success Hosting game " + matchID);
                 networkMatchChecker.matchId = matchID.toGuid();
                 TargetHostGame(true, matchID, playerIndex);
             }
             else
             {
-                Debug.Log($"<color=red>Failed to host game </color>");
+                this.LogWarn($"<color=red>Failed to host game </color>");
                 TargetHostGame(false, matchID, playerIndex);
             }
         }
@@ -236,7 +237,7 @@ namespace Networking
             this.playerName = name;
             if (MatchMaker.instance.JoinGame(matchID, this, out playerIndex))
             {
-                Debug.Log("Success Joining game " + matchID);
+                this.LogLog("Success Joining game " + matchID);
                 networkMatchChecker.matchId = matchID.toGuid();
                 TargetJoinGame(true, matchID, playerIndex);
             }
@@ -251,7 +252,7 @@ namespace Networking
         void CmdBeginGame()
         {
             MatchMaker.instance.BeginGame(matchID);
-            Debug.Log($"Starting Game");
+            this.LogLog($"Starting Game");
         }
 
         public void StartGame() // called by Server from MatchMaker - therefore runs on Server
@@ -287,18 +288,18 @@ namespace Networking
             if (isLocalPlayer) {
                 localPlayer = this;
             } else {
-                Debug.Log ($"Spawning other player UI Prefab");
+                this.LogLog ($"Spawning other player UI Prefab");
                 playerLobbyUI = UILobby.instance.SpawnPlayerUIPrefab (this);
             }
         }
 
         public override void OnStopClient () {
-            Debug.Log ($"Client Stopped");
+            this.LogLog ($"Client Stopped");
             ClientDisconnect ();
         }
 
         public override void OnStopServer () {
-            Debug.Log ($"Client Stopped on Server");
+            this.LogLog ($"Client Stopped on Server");
             ServerDisconnect ();
         }
 

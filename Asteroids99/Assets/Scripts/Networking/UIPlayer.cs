@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Utils;
 
 namespace Networking{
     public class UIPlayer : MonoBehaviour
@@ -14,7 +15,7 @@ namespace Networking{
         public void SetPlayer(Player player)
         {
             this.player = player;
-            Debug.Log($"Set Player {player}");
+            this.LogLog($"Set Player {player}");
             text.text = player.playerName;
 
         }
