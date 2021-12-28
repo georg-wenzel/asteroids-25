@@ -47,6 +47,7 @@ public class EnemyBoxes : MonoBehaviour
         if(!sourceSquare.isGameOver)
         {
             Player.localPlayer.SpawnAttackAsteroid(sourceSquare.playerIndex);
+            return;
         }
         EnemySquare destination = GetRandomNeighbourSquare(sourceSquare);
         Player.localPlayer.SpawnAttackAsteroid(destination.playerIndex);
@@ -57,7 +58,9 @@ public class EnemyBoxes : MonoBehaviour
         List<EnemySquare> allEnemySquares = new List<EnemySquare>();
         for(int i=0; i<transform.childCount; i++)
         {
-            allEnemySquares.Add((EnemySquare)transform.GetChild(i).GetComponent(typeof(EnemySquare)));
+            EnemySquare es = (EnemySquare)transform.GetChild(i).GetComponent(typeof(EnemySquare));
+            if(!es.isGameOver)
+                allEnemySquares.Add(es);
         }
 
         /* get 2 neighbours
