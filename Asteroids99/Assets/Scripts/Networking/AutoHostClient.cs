@@ -4,6 +4,7 @@ using UnityEngine;
 using Mirror;
 using System;
 using TMPro;
+using Utils;
 
 public class AutoHostClient : MonoBehaviour
 {
@@ -11,10 +12,10 @@ public class AutoHostClient : MonoBehaviour
     [SerializeField] TMP_Text warningText;
     void Start(){
         if(!Application.isBatchMode){
-            Debug.Log($"Client Build");
+            this.LogLog($"Client Build");
                 //networkManager.StartClient();
         } else {
-            Debug.Log($"Server Starting");
+            this.LogLog($"Server Starting");
         }
     }
 
@@ -30,7 +31,7 @@ public class AutoHostClient : MonoBehaviour
     
     public void JoinLocal()
     {
-        Debug.Log($"Joining on {networkManager.networkAddress}");
+        this.LogLog($"Joining on {networkManager.networkAddress}");
         warningText.enabled = true;
         networkManager.StartClient();
     }

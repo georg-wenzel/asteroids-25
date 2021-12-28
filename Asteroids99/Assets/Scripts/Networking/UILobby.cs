@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Utils;
+
 namespace Networking{
 
     public class UILobby : MonoBehaviour
@@ -32,7 +34,7 @@ namespace Networking{
 
         public void Host()
         {
-            Debug.Log($"Player {Player.localPlayer} is hosting, Playername = {Player.localPlayer.playerName}");
+            this.LogLog($"Player {Player.localPlayer} is hosting, Playername = {Player.localPlayer.playerName}");
             Player.localPlayer.HostGame(Player.localPlayer.playerName);
 
         }
@@ -80,7 +82,7 @@ namespace Networking{
 
         public void startSuccess()
         {
-            Debug.Log("UI Lobby Start Success");
+            this.LogLog("UI Lobby Start Success");
             hostJoin.SetActive(false);
             startGameButton.SetActive(false);
             lobbyPanel.SetActive(false);
