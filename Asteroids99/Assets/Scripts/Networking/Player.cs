@@ -172,6 +172,7 @@ namespace Networking
         //     Debug.Log("#################");
         // }
 
+        // run on server
         public void UpdateGameStatesOnClients()
         {
             if (MatchMaker.instance.getMatch(matchID).players.Count > 1)
@@ -200,6 +201,20 @@ namespace Networking
                     playerNames.RemoveAt(index);
                     playerIndices.Remove(pl.playerIndex);
                     pl.UpdateGUIOnClients(gameStates, playerNames, playerIndices);
+
+                    bool allGameOver = true;
+                    foreach(GameState gs in gameStates)
+                    {
+                        if(!gs.GameOver)
+                            allGameOver = false;
+                    }
+                    if(allGameOver)
+                    {
+                        MatchMaker.instance.getMatch(matchID).GameWon();
+                        // save player data to database
+                        // get player data with MatchMaker.instance.getMatch(matchID).players
+                        // iterate over the above list and call player.playerName and player.gameState.score
+                    }
                 }
             }
         }

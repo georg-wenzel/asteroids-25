@@ -15,6 +15,7 @@ namespace Networking
         public string matchID;
         public bool matchFull;
         public bool inMatch;
+        public bool gameWon = false;
 
         public void AddPlayer(Player player)
         {
@@ -24,6 +25,11 @@ namespace Networking
         public List<Player> GetPlayers()
         {
             return players;
+        }
+
+        public void GameWon()
+        {
+            gameWon = true;
         }
 
         public List<Player> players = new List<Player> ();
