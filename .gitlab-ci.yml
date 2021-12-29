@@ -69,10 +69,10 @@ test-playmode:
   variables:
     TEST_PLATFORM: playmode
 
-test-editmode:
-  <<: *test
-  variables:
-    TEST_PLATFORM: editmode
+#test-editmode:
+#  <<: *test
+#  variables:
+#    TEST_PLATFORM: editmode
 # uncomment the following blocks if you'd like to have junit reporting unity test results in gitlab
 # We currently have the following issue which prevents it from working right now, but you can give
 # a hand if you're interested in this feature:
