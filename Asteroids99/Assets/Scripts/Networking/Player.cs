@@ -58,7 +58,7 @@ namespace Networking
 
         public void SpawnAttackAsteroid(Player targetPlayer)
         {
-            CmdSpawnAsteroid(targetPlayer);
+            CmdSpawnAsteroid(this, targetPlayer);
         }
 
         public void JoinGame(string inputID, string name)
@@ -127,10 +127,9 @@ namespace Networking
         }
 
         [TargetRpc]
-        void TargetSpawnAsteroid(bool success, string matchID, int playerIndex)
+        void TargetSpawnAsteroid(bool success, string matchID, int sourceIndex, int targetIndex)
         {
-            //TODO
-            GameObject.Find("AsteroidManager").GetComponent<AsteroidSpawner>().SpawnAttackAsteroid();
+            GameObject.Find("AsteroidManager").GetComponent<AsteroidSpawner>().SpawnAttackAsteroid(sourceIndex);
         }
 
         #endregion executedByServer
@@ -242,11 +241,10 @@ namespace Networking
         }
 
         [Command]
-        void CmdSpawnAsteroid(Player targetPlayer)
+        void CmdSpawnAsteroid(Player sourcePlayer, Player targetPlayer)
         {
-            TargetSpawnAsteroid(true, matchID, targetPlayer.playerIndex);
+            TargetSpawnAsteroid(true, matchID, sourcePlayer.playerIndex, targetPlayer.playerIndex);
         }
-
         #endregion executedOnServer
 
         // #################################################################

@@ -63,18 +63,20 @@ public class AsteroidSpawner : MonoBehaviour, IAsteroidDeathObserver
     /// Spawns an attack asteroid on this players field. The asteroid counts against the maximum limit, but can be spawned
     /// even if the maximum amount of asteroids are on the field. This method can be called externally.
     /// </summary>
-    public void SpawnAttackAsteroid()
+    /// <param name="sourceID">The source of the attack asteroid</param>
+    public void SpawnAttackAsteroid(int sourceID)
     {
         builder.Reset();
         builder.BuildAttack();
         builder.BuildPersistent();
-        SpawnAndInjectObservers();
+        var asteroid = SpawnAndInjectObservers();
+        asteroid.GetComponent<AttackAsteroidSource>().SourcePlayerID = sourceID;
     }
 
     /// <summary>
     /// Spawns the Asteroid currently stored in the builder, and injects all active death observers into it.
     /// </summary>
-    private void SpawnAndInjectObservers()
+    private GameObject SpawnAndInjectObservers()
     {
         GameObject obj = builder.Spawn();
         //Register this as an observer for the asteroid death
@@ -84,6 +86,7 @@ public class AsteroidSpawner : MonoBehaviour, IAsteroidDeathObserver
             obj.GetComponent<BaseAsteroidBehaviour>().register(o);
         last_asteroid = Time.time;
         asteroid_count++;
+        return obj;
     }
 
     /// <summary>
