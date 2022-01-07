@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using Utils;
 
 
 namespace Networking
@@ -13,7 +14,7 @@ namespace Networking
         List<Player> players = new List<Player>();
         public void AddPlayer(Player player)
         {
-            Debug.Log($"Adding player {player} {player.playerIndex }");
+            this.LogLog($"Adding player {player} {player.playerIndex }");
             players.Add(player);
 
         }

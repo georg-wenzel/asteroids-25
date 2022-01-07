@@ -11,10 +11,14 @@ public class AttackAsteroidSource : MonoBehaviour
     public int SourcePlayerID { get; set; }
     #endregion
 
-    private void OnDestroy()
+    public void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Attack Asteroid hit from player ID " + this.SourcePlayerID);
-        //TODO report back to server via command
-        //ex. UpdateHitCount(this.SourcePlayerID)
+        //when this asteroid hits the local spaceship
+        if (collision.gameObject.tag.Equals("Spaceship"))
+        {
+            Debug.Log("Attack Asteroid hit from player ID " + this.SourcePlayerID);
+            //TODO report back to server via command
+            //ex. Player.UpdateHitCount(this.SourcePlayerID)
+        }
     }
 }

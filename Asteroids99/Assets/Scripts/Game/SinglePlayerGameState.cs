@@ -39,15 +39,15 @@ public class SinglePlayerGameState : MonoBehaviour, IHPObserver, IAsteroidDeathO
     {
         this.PlayerGameState.HP = hp;
         //If we just went game over, update the game state, and show the game over hud
-        if (this.PlayerGameState.HP == 0 && !this.PlayerGameState.GameOver)
+        if (this.PlayerGameState.HP == 0 && !this.PlayerGameState.GameOver && !HUD.HasWon())
         {
             this.PlayerGameState.GameOver = true;
             HUD.GameOver();
             HUD.UpdateHP(this.PlayerGameState);
             Player.localPlayer.SetGameState(this.PlayerGameState);
         }
-        //else, only update if the player is still above 0 HP (if the player has been game over, do not update the local game state)
-        else if (this.PlayerGameState.HP > 0)
+        //else, only update if the player is still above 0 HP (if the player has been game over, do not update the local game state) and has not won already
+        else if (this.PlayerGameState.HP > 0 && !HUD.HasWon())
         {
             HUD.UpdateHP(this.PlayerGameState);
             Player.localPlayer.SetGameState(this.PlayerGameState);
@@ -61,7 +61,7 @@ public class SinglePlayerGameState : MonoBehaviour, IHPObserver, IAsteroidDeathO
     public void NotifyDeath(GameObject asteroid)
     {
         //Only add score / update if player is not game over
-        if (this.PlayerGameState.GameOver) return;
+        if (this.PlayerGameState.GameOver || HUD.HasWon()) return;
 
         int score = 100;
         //multiply score by size of asteroid (e.g. 3x scale => 3x score)

@@ -509,6 +509,7 @@ namespace Mirror
         /// <summary>This stops both the client and the server that the manager is using.</summary>
         public void StopHost()
         {
+            Debug.Log("Stopping Host");
             OnStopHost();
 
             // calling OnTransportDisconnected was needed to fix
@@ -737,7 +738,8 @@ namespace Mirror
         // virtual so that inheriting classes' OnDestroy() can call base.OnDestroy() too
         public virtual void OnDestroy()
         {
-            //Debug.Log("NetworkManager destroyed");
+            StopHost();
+            Debug.Log("NetworkManager destroyed");
         }
 
         /// <summary>The name of the current network scene.</summary>

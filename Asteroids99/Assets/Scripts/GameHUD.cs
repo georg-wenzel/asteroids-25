@@ -10,6 +10,7 @@ public class GameHUD : MonoBehaviour
 {
 
     [SerializeField] GameObject gameOverPanel;
+    [SerializeField] GameObject winningPanel;
     [SerializeField] List<Image> hp_images;
     [SerializeField] Sprite hp_0Life;
     [SerializeField] Sprite hp_1Life;
@@ -17,17 +18,20 @@ public class GameHUD : MonoBehaviour
 
     public void UpdateHP(GameState gameState)
     {
-        int hp = gameState.HP;
-        if (hp > hp_images.Capacity)
-            Debug.Log("HP and amount of HP-symbols do not fit");
-        for (int i=hp_images.Capacity; i>0; i--)
+        if(!HasWon())
         {
-            if (i > hp)
+            int hp = gameState.HP;
+            if (hp > hp_images.Capacity)
+                Debug.Log("HP and amount of HP-symbols do not fit");
+            for (int i=hp_images.Capacity; i>0; i--)
             {
-                hp_images[i-1].sprite = hp_0Life;
+                if (i > hp)
+                {
+                    hp_images[i-1].sprite = hp_0Life;
+                }
+                else
+                    break;
             }
-            else
-                break;
         }
     }
 
@@ -41,9 +45,20 @@ public class GameHUD : MonoBehaviour
         gameOverPanel.SetActive(true);
     }
 
+    public bool HasWon()
+    {
+        return winningPanel.activeSelf;
+    }
+
+    public void GameWon()
+    {
+        winningPanel.SetActive(true);
+    }
+
     public void ExitGame()
     {
-        SceneManager.LoadScene("MainMenu");
+        //SceneManager.LoadScene("MainMenu");
+        GameObject.Find("MultiplayerUI").GetComponent<MultiplayerUI>().goToMainMenu();
     }
 
 }

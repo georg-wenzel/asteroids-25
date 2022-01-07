@@ -891,6 +891,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Spaceship
       objectReference: {fileID: 0}
+    - target: {fileID: 112346814045105410, guid: 3a1140437af783a4eb50da384fdafbc2, type: 3}
+      propertyPath: m_TagString
+      value: Spaceship
+      objectReference: {fileID: 0}
     - target: {fileID: 112346814045105470, guid: 3a1140437af783a4eb50da384fdafbc2, type: 3}
       propertyPath: m_Simulated
       value: 1

@@ -14,7 +14,7 @@ public class GameState
     /// </summary>
     public bool GameOver;
     /// <summary>
-    /// The current HP of the player's spaceship.
+    /// Whether or not the player has won the game.
     /// </summary>
     public int HP;
     /// <summary>

@@ -9,10 +9,10 @@ using Networking;
 public class MultiplayerUI : MonoBehaviour
 {
     [SerializeField] GameObject hostJoin;
-    [SerializeField] TMP_InputField nameInput;
 
     public void goToMainMenu()
     {
+        Destroy(GameObject.Find("NetworkManager"));
         SceneManager.LoadScene("MainMenu");
     }
 

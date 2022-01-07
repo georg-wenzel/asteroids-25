@@ -21,6 +21,10 @@ public class EnemySquare : MonoBehaviour
 
     public Player localPlayer;
 
+    public int playerIndex;
+
+    public bool isGameOver = false;
+
     public GameState currentGameState {get;private set;}
 
     #endregion
@@ -32,23 +36,12 @@ public class EnemySquare : MonoBehaviour
         gameOverUI.SetActive(false);
     }
 
-    // [TargetRpc]
-    // public void SetLocalPlayerOnClient(Player player)
-    // {
-    //     this.localPlayer = player;
-    // }
-
-    // [Command]
-    // public void SetLocalPlayer(Player player)
-    // {
-    //     SetLocalPlayerOnClient(player);
-    // }
-
     public void UpdateUI(GameState gameState, string name = "")
     {
         playerName.text = name;
         playerHP.SetText(gameState.HP.ToString());
         playerScore.SetText(gameState.Score.ToString());
+        isGameOver = gameState.GameOver;
         if(gameState.GameOver)
         {
             gameOverUI.SetActive(true);
@@ -57,10 +50,11 @@ public class EnemySquare : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if(other.gameObject.tag.Equals("TODO")) // TODO
+        if(other.gameObject.tag.Equals("FriendlyAsteroid"))
         {
             EnemyBoxes eb = (EnemyBoxes)enemyBoxes.GetComponent(typeof(EnemyBoxes));
             eb.SpawnAsteroidOnOtherPlayer(this);
+            Destroy(other.gameObject); // destroy friendlyAsteroid
         }
     }
 

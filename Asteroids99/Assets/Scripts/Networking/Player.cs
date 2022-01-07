@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;
+using System.Linq;
+using Utils;
 
 namespace Networking
 {
@@ -56,9 +58,9 @@ namespace Networking
             CmdHostGame(matchID, name);
         }
 
-        public void SpawnAttackAsteroid(Player targetPlayer)
+        public void SpawnAttackAsteroid(int targetPlayerIndex)
         {
-            CmdSpawnAsteroid(this, targetPlayer);
+            CmdSpawnAsteroid(this.playerIndex, targetPlayerIndex);
         }
 
         public void JoinGame(string inputID, string name)
@@ -73,10 +75,10 @@ namespace Networking
 
         public void PrintClientDataOfMatch()
         {
-            Debug.Log("#################");
-            Debug.Log("this: " + this);
-            Debug.Log("this.playerIndex: " + this.playerIndex);
-            Debug.Log("Players in match:");
+            this.LogLog("#################");
+            this.LogLog("this: " + this);
+            this.LogLog("this.playerIndex: " + this.playerIndex);
+            this.LogLog("Players in match:");
             // foreach(Player p in this.currentMatch.players)
             // {
             //     Debug.Log("-----");
@@ -84,7 +86,7 @@ namespace Networking
             //     Debug.Log("Player Score: " + p.gameState.Score);
             //     Debug.Log("-----");
             // }
-            Debug.Log("#################");
+            this.LogLog("#################");
         }
 
         #endregion executedByClient
@@ -95,7 +97,7 @@ namespace Networking
         void TargetHostGame(bool success, string matchID, int playerIndex)
         {
             //localPlayer.playerIndex = playerIndex;
-            Debug.Log($"This MatchId: {matchID}");
+            this.LogLog($"This MatchId: {matchID}");
             UILobby.instance.HostSuccess(success, matchID);
         }
 
@@ -104,32 +106,46 @@ namespace Networking
         {
             //localPlayer.playerIndex = playerIndex;
             //localPlayer.matchID = matchID;
-            Debug.Log($"This MatchId: {matchID}");
+            this.LogLog($"This MatchId: {matchID}");
             UILobby.instance.JoinSuccess(success, matchID);
         }
 
         [TargetRpc]
         void TargetBeginGame()
         {
-            Debug.Log($"This MatchId: {matchID} | Starting Game");
+            this.LogLog($"This MatchId: {matchID} | Starting Game");
             //Additively LoadGameScene
             NetworkHelper helper = new GameObject("NetworkHelper").AddComponent<NetworkHelper>();
             StartCoroutine(helper.LoadSceneEnumerator("OnlineGameScene"));
             UILobby.instance.startSuccess();
-            Debug.Log("Loaded Game");
+            this.LogLog("Loaded Game");
         }
 
         [TargetRpc]
-        public void UpdateGUIOnClients(List<GameState> enemyGameStates, List<string> enemyNames)
+        public void UpdateGUIOnClients(List<GameState> enemyGameStates, List<string> enemyNames, List<int> playerIndices)
         {
             // PrintClientDataOfMatch();
-            GameObject.Find("EnemyBoxes").GetComponent<EnemyBoxes>().UpdateEnemySquares(enemyGameStates, enemyNames);
+            GameObject.Find("EnemyBoxes").GetComponent<EnemyBoxes>().UpdateEnemySquares(enemyGameStates, enemyNames, playerIndices);
+            bool allEnemiesGameOver = true;
+            foreach(GameState gs in enemyGameStates)
+            {
+                if (!gs.GameOver)
+                {
+                    allEnemiesGameOver = false;
+                    break;
+                }
+            }
+            if(allEnemiesGameOver)
+            {
+                GameObject.Find("HUD").GetComponent<GameHUD>().GameWon();
+            }
         }
 
         [TargetRpc]
-        void TargetSpawnAsteroid(bool success, string matchID, int sourceIndex, int targetIndex)
+        void TargetSpawnAsteroid(int sourceId)
         {
-            GameObject.Find("AsteroidManager").GetComponent<AsteroidSpawner>().SpawnAttackAsteroid(sourceIndex);
+            this.LogLog("Enemy spawned an AttackAsteroid on this player");
+            GameObject.Find("AsteroidManager").GetComponent<AsteroidSpawner>().SpawnAttackAsteroid(sourceId);
         }
 
         #endregion executedByServer
@@ -156,6 +172,7 @@ namespace Networking
         //     Debug.Log("#################");
         // }
 
+        // run on server
         public void UpdateGameStatesOnClients()
         {
             if (MatchMaker.instance.getMatch(matchID).players.Count > 1)
@@ -164,22 +181,40 @@ namespace Networking
                 {
                     List<GameState> gameStates = new List<GameState>();
                     List<string> playerNames = new List<string>();
+                    List<int> playerIndices = new List<int>();
                     foreach (Player p in MatchMaker.instance.getMatch(matchID).players)
                     {
                         gameStates.Add(p.gameState);
                         playerNames.Add(p.playerName);
+                        playerIndices.Add(p.playerIndex);
                     }
 
                     for (int i = MatchMaker.instance.getMatch(matchID).players.Count; i < 25; i++)
                     {
                         gameStates.Add(new GameState(true, 0, 0)); // dummy gameState which is GameOver
                         playerNames.Add("Player " + i);
+                        playerIndices.Add(playerIndices.Last() + 1);
                     }
 
                     gameStates.Remove(pl.gameState);
                     var index = playerNames.IndexOf(pl.playerName);
                     playerNames.RemoveAt(index);
-                    pl.UpdateGUIOnClients(gameStates, playerNames);
+                    playerIndices.Remove(pl.playerIndex);
+                    pl.UpdateGUIOnClients(gameStates, playerNames, playerIndices);
+
+                    bool allGameOver = true;
+                    foreach(GameState gs in gameStates)
+                    {
+                        if(!gs.GameOver)
+                            allGameOver = false;
+                    }
+                    if(allGameOver)
+                    {
+                        MatchMaker.instance.getMatch(matchID).GameWon();
+                        // save player data to database
+                        // get player data with MatchMaker.instance.getMatch(matchID).players
+                        // iterate over the above list and call player.playerName and player.gameState.score
+                    }
                 }
             }
         }
@@ -199,13 +234,13 @@ namespace Networking
             this.playerName = name;
             if (MatchMaker.instance.HostGame(matchID, this, out playerIndex))
             {
-                Debug.Log("Success Hosting game " + matchID);
+                this.LogLog("Success Hosting game " + matchID);
                 networkMatchChecker.matchId = matchID.toGuid();
                 TargetHostGame(true, matchID, playerIndex);
             }
             else
             {
-                Debug.Log($"<color=red>Failed to host game </color>");
+                this.LogWarn($"<color=red>Failed to host game </color>");
                 TargetHostGame(false, matchID, playerIndex);
             }
         }
@@ -217,7 +252,7 @@ namespace Networking
             this.playerName = name;
             if (MatchMaker.instance.JoinGame(matchID, this, out playerIndex))
             {
-                Debug.Log("Success Joining game " + matchID);
+                this.LogLog("Success Joining game " + matchID);
                 networkMatchChecker.matchId = matchID.toGuid();
                 TargetJoinGame(true, matchID, playerIndex);
             }
@@ -232,7 +267,7 @@ namespace Networking
         void CmdBeginGame()
         {
             MatchMaker.instance.BeginGame(matchID);
-            Debug.Log($"Starting Game");
+            this.LogLog($"Starting Game");
         }
 
         public void StartGame() // called by Server from MatchMaker - therefore runs on Server
@@ -241,10 +276,18 @@ namespace Networking
         }
 
         [Command]
-        void CmdSpawnAsteroid(Player sourcePlayer, Player targetPlayer)
+        void CmdSpawnAsteroid(int sourcePlayerIndex, int targetPlayerIndex)
         {
-            TargetSpawnAsteroid(true, matchID, sourcePlayer.playerIndex, targetPlayer.playerIndex);
+            foreach (Player p in MatchMaker.instance.getMatch(matchID).players)
+            {
+                if (p.playerIndex == targetPlayerIndex)
+                {
+                    p.TargetSpawnAsteroid(sourcePlayerIndex);
+                    break;
+                }
+            }
         }
+
         #endregion executedOnServer
 
         // #################################################################
@@ -260,18 +303,18 @@ namespace Networking
             if (isLocalPlayer) {
                 localPlayer = this;
             } else {
-                Debug.Log ($"Spawning other player UI Prefab");
+                this.LogLog ($"Spawning other player UI Prefab");
                 playerLobbyUI = UILobby.instance.SpawnPlayerUIPrefab (this);
             }
         }
 
         public override void OnStopClient () {
-            Debug.Log ($"Client Stopped");
+            this.LogLog ($"Client Stopped");
             ClientDisconnect ();
         }
 
         public override void OnStopServer () {
-            Debug.Log ($"Client Stopped on Server");
+            this.LogLog ($"Client Stopped on Server");
             ServerDisconnect ();
         }
 

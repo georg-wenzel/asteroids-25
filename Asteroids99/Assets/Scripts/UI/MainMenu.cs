@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Utils;
 
 public class MainMenu : MonoBehaviour
 {
@@ -19,6 +21,12 @@ public class MainMenu : MonoBehaviour
     {
         // Load some Scene
         SceneManager.LoadScene("MultiplayerConnect");
+    }
+
+    public void ShowLeaderboard()
+    {
+        // Load some Scene
+        SceneManager.LoadScene("Leaderboard");
     }
 
     public void QuitGame()

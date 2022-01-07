@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Utils;
 
 namespace Networking
 {
@@ -22,23 +23,23 @@ namespace Networking
             AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
             //Don't let the Scene activate until you allow it to
             asyncOperation.allowSceneActivation = false;
-            Debug.Log("Pro :" + asyncOperation.progress);
+            this.LogLog("Pro :" + asyncOperation.progress);
             while (asyncOperation.progress < 0.9f)
             {
-                Debug.Log("Loading scene " + " [][] Progress: " + asyncOperation.progress);
+                this.LogLog("Loading scene " + " [][] Progress: " + asyncOperation.progress);
                 yield return null;
             }
             asyncOperation.allowSceneActivation = true;
             while (!asyncOperation.isDone)
             {
-                Debug.Log("Scence is not Done");
+                this.LogLog("Scence is not Done");
                 yield return null;
             }
             Scene nThisScene = SceneManager.GetSceneByName(sceneName);
 
             if (nThisScene.IsValid())
             {
-                Debug.Log("Scene is Valid");
+                this.LogLog("Scene is Valid");
                 SceneManager.SetActiveScene(nThisScene);
             }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 using Mirror;
 using System;
 using System.Security.Cryptography;
+using Utils;
 
 namespace Networking
 {
@@ -14,6 +15,7 @@ namespace Networking
         public string matchID;
         public bool matchFull;
         public bool inMatch;
+        public bool gameWon = false;
 
         public void AddPlayer(Player player)
         {
@@ -23,6 +25,11 @@ namespace Networking
         public List<Player> GetPlayers()
         {
             return players;
+        }
+
+        public void GameWon()
+        {
+            gameWon = true;
         }
 
         public List<Player> players = new List<Player> ();
@@ -49,7 +56,7 @@ namespace Networking
         [SerializeField] int maxMatchPlayers = 25;
         public Match getMatch(String matchID) {
             if(matches.Count == 0)
-                Debug.Log("Trying to get a match, but there are no matches in the match-list of the server-matchMaker.");
+                this.LogLog("Trying to get a match, but there are no matches in the match-list of the server-matchMaker.");
             foreach (Match match in matches)
             {
                 if (match.matchID == matchID)
@@ -64,7 +71,7 @@ namespace Networking
             playerIndex = -1;
             if (matchIDs.Contains(matchID))
             {
-                Debug.Log($"Match ID {matchID} already exists");
+                this.LogLog($"Match ID {matchID} already exists");
                 return false;
             }
             else
@@ -72,12 +79,12 @@ namespace Networking
                 Match m = new Match(matchID, player);
                 matches.Add(m);
                 matchIDs.Add(matchID);
-                Debug.Log("Created new Match with ID " + getMatch(matchID).matchID);
+                this.LogLog("Created new Match with ID " + getMatch(matchID).matchID);
                 // player.currentMatch = getMatch(matchID);
                 player.matchID = matchID;
-                Debug.Log ($"Match generated");
-                Debug.Log($"Match: {matchID} added");
-                playerIndex = 0;
+                this.LogLog ($"Match generated");
+                this.LogLog($"Match: {matchID} added");
+                playerIndex = 1;
                 player.playerIndex = playerIndex;
                 return true;
             }
@@ -88,7 +95,7 @@ namespace Networking
             playerIndex = -1;
             if (!matchIDs.Contains(matchID))
             {
-                Debug.Log($"Match ID {matchID} does not exist");
+                this.LogLog($"Match ID {matchID} does not exist");
                 return false;
             }
             else
@@ -100,7 +107,7 @@ namespace Networking
                         matches[i].AddPlayer(player);
                         // player.currentMatch = matches[i];
                         player.matchID = matchID;
-                        Debug.Log($"Player {player.playerName} joined match {matchID}");
+                        this.LogLog($"Player {player.playerName} joined match {matchID}");
                         playerIndex = matches[i].GetPlayers().Count;
                         player.playerIndex = playerIndex;
                         matches[i].players[0].PlayerCountUpdated (matches[i].players.Count);
@@ -108,11 +115,11 @@ namespace Networking
                                 matches[i].matchFull = true;
                             }
                         
-                        Debug.Log ($"Match joined");
+                        this.LogLog ($"Match joined");
                         return true;
                     }
                 }
-                Debug.Log($"Could not find Match: {matchID}");
+                this.LogLog($"Could not find Match: {matchID}");
                 return false;
             }
         }
@@ -136,10 +143,10 @@ namespace Networking
                 if (matches[i].matchID == _matchID) {
                     int playerIndex = matches[i].players.IndexOf (player);
                     if (matches[i].players.Count > playerIndex) matches[i].players.RemoveAt (playerIndex);
-                    Debug.Log ($"Player disconnected from match {_matchID} | {matches[i].players.Count} players remaining");
+                    this.LogLog ($"Player disconnected from match {_matchID} | {matches[i].players.Count} players remaining");
 
                     if (matches[i].players.Count == 0) {
-                        Debug.Log ($"No more players in Match. Terminating {_matchID}");
+                        this.LogLog ($"No more players in Match. Terminating {_matchID}");
                         matches.RemoveAt (i);
                         matchIDs.Remove (_matchID);
                     } else {
