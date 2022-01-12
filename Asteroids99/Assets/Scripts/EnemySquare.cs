@@ -12,7 +12,12 @@ public class EnemySquare : MonoBehaviour
 {
 
     #region fields
+    public enum FieldDirection
+    {
+        UP, DOWN, LEFT, RIGHT
+    }
 
+    [SerializeField] FieldDirection GameFieldDirection;
     [SerializeField] GameObject gameOverUI; // red X, active when player is dead
     [SerializeField] TMP_Text playerName;
     [SerializeField] TMP_Text playerScore;
@@ -26,6 +31,13 @@ public class EnemySquare : MonoBehaviour
     public bool isGameOver = false;
 
     public GameState currentGameState {get;private set;}
+
+    public ParticleSystem particlesUp;
+    public ParticleSystem particlesDown;
+    public ParticleSystem particlesLeft;
+    public ParticleSystem particlesRight;
+
+    public AudioSource attackAudio;
 
     #endregion
 
@@ -55,6 +67,29 @@ public class EnemySquare : MonoBehaviour
             EnemyBoxes eb = (EnemyBoxes)enemyBoxes.GetComponent(typeof(EnemyBoxes));
             eb.SpawnAsteroidOnOtherPlayer(this);
             Destroy(other.gameObject); // destroy friendlyAsteroid
+
+            //Play particle effect
+            switch(this.GameFieldDirection)
+            {
+                case FieldDirection.UP:
+                    particlesUp.Play();
+                    break;
+
+                case FieldDirection.DOWN:
+                    particlesDown.Play();
+                    break;
+
+                case FieldDirection.LEFT:
+                    particlesLeft.Play();
+                    break;
+
+                case FieldDirection.RIGHT:
+                    particlesRight.Play();
+                    break;
+            }
+
+            //Play audio
+            attackAudio.Play();
         }
     }
 
