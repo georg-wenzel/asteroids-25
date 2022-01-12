@@ -124,6 +124,7 @@ public class AsteroidSpawner : MonoBehaviour, IAsteroidDeathObserver
     {
         for(; ;)
         {
+            yield return new WaitForSeconds(0.5f);
             if (Time.time - last_asteroid >= 0.9f && asteroid_count < MaxAsteroids)
             {
                 builder.Reset();
@@ -132,7 +133,6 @@ public class AsteroidSpawner : MonoBehaviour, IAsteroidDeathObserver
                 builder.BuildPersistent();
                 SpawnAndInjectObservers();
             }
-            yield return new WaitForSeconds(0.5f);
         }
     }
     #endregion
