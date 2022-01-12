@@ -485,7 +485,27 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 406538867214317479, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 406538867990024067, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 406538868003999506, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 406538868683464226, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 406538868722348779, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 406538868731235823, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 1
       objectReference: {fileID: 0}
@@ -540,6 +560,78 @@ PrefabInstance:
     - target: {fileID: 4927975089833946051, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268253655724793953, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: GameFieldDirection
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268253656294617694, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: GameFieldDirection
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268253656410842503, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: GameFieldDirection
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268253656466984324, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: GameFieldDirection
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268253656576064119, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: GameFieldDirection
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268253656651112115, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: GameFieldDirection
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268253656654450245, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: GameFieldDirection
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268253656760144674, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: GameFieldDirection
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268253656859082393, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: GameFieldDirection
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268253656995009161, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: GameFieldDirection
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268253657029449797, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: GameFieldDirection
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268253657082583252, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: GameFieldDirection
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268253657208424932, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: GameFieldDirection
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268253657236661549, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: GameFieldDirection
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268253657294871081, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: GameFieldDirection
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268253657406715942, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: GameFieldDirection
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268253657407633205, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: GameFieldDirection
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268253657527266946, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
+      propertyPath: GameFieldDirection
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8837066325678513967, guid: 99eb206320ff02a469edf66c79df13cd, type: 3}
       propertyPath: sceneId
@@ -889,6 +981,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 112346814045105410, guid: 3a1140437af783a4eb50da384fdafbc2, type: 3}
       propertyPath: m_Name
+      value: Spaceship
+      objectReference: {fileID: 0}
+    - target: {fileID: 112346814045105410, guid: 3a1140437af783a4eb50da384fdafbc2, type: 3}
+      propertyPath: m_TagString
       value: Spaceship
       objectReference: {fileID: 0}
     - target: {fileID: 112346814045105470, guid: 3a1140437af783a4eb50da384fdafbc2, type: 3}

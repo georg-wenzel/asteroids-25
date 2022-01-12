@@ -71,7 +71,8 @@ public class SpaceshipHealthManager : MonoBehaviour, IHPObservable
     {
         foreach(IHPObserver o in observers)
         {
-            o.UpdateHP(this.hp);
+            if (o != null && this.gameObject != null)
+                o.UpdateHP(this.hp);
         }
     }
 

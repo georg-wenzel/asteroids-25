@@ -206,7 +206,8 @@ public class BaseAsteroidBehaviour : MonoBehaviour, IAsteroidDeathObservable
     {
         foreach(IAsteroidDeathObserver o in observers)
         {
-            o.NotifyDeath(this.gameObject);
+            if(o != null && this.gameObject != null)
+                o.NotifyDeath(this.gameObject);
         }
     }
     #endregion

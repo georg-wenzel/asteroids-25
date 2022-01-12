@@ -127,6 +127,7 @@ public class AsteroidBuilder : MonoBehaviour
         color = new Color(1, 0.3f, 0.3f, 1);
         initialSpeed *= 2f;
         scriptsToAttach.Add("AttackAsteroidBehaviour");
+        scriptsToAttach.Add("AttackAsteroidSource");
     }
 
     /// <summary>
