@@ -119,6 +119,8 @@ namespace Networking
             StartCoroutine(helper.LoadSceneEnumerator("OnlineGameScene"));
             UILobby.instance.startSuccess();
             this.LogLog("Loaded Game");
+            // Turn off Backgroundmusic
+            GameObject.Find("BackgroundMusic").SetActive(false);
         }
 
         [TargetRpc]
