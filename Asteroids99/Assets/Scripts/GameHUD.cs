@@ -15,6 +15,7 @@ public class GameHUD : MonoBehaviour
     [SerializeField] Sprite hp_0Life;
     [SerializeField] Sprite hp_1Life;
     [SerializeField] TMP_Text scoreText;
+    [SerializeField] TMP_Text PKsText;
 
     public void UpdateHP(GameState gameState)
     {
@@ -38,6 +39,11 @@ public class GameHUD : MonoBehaviour
     public void UpdateScore(GameState gameState)
     {
         scoreText.text = gameState.Score.ToString();
+    }
+
+    public void UpdatePKs(GameState gameState)
+    {
+        PKsText.text = gameState.PlayerKills.ToString();
     }
 
     public void GameOver()

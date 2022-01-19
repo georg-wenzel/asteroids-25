@@ -150,6 +150,12 @@ namespace Networking
             GameObject.Find("AsteroidManager").GetComponent<AsteroidSpawner>().SpawnAttackAsteroid(sourceId);
         }
 
+        [TargetRpc]
+        public void IncreasePlayerKills()
+        {
+            GameObject.Find("GameStateManager").GetComponent<SinglePlayerGameState>().IncreasePlayerKills();
+        }
+
         #endregion executedByServer
 
         #endregion executedOnClient
@@ -217,6 +223,19 @@ namespace Networking
                         // get player data with MatchMaker.instance.getMatch(matchID).players
                         // iterate over the above list and call player.playerName and player.gameState.score
                     }
+                }
+            }
+        }
+
+        [Command]
+        public void AttackAsteroidKilledPlayer(int SourcePlayerID)
+        {
+            foreach(Player pl in MatchMaker.instance.getMatch(matchID).players)
+            {
+                if (pl.playerIndex == SourcePlayerID)
+                {
+                    pl.IncreasePlayerKills();
+                    break;
                 }
             }
         }

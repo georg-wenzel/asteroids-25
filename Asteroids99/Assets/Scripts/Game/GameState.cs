@@ -21,6 +21,8 @@ public class GameState
     /// The current player's score.
     /// </summary>
     public int Score;
+
+    public int PlayerKills;
     
     #endregion
 
