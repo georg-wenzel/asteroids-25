@@ -31,6 +31,12 @@ public class SinglePlayerGameState : MonoBehaviour, IHPObserver, IAsteroidDeathO
         PlayerGameState = new GameState(false, 3, 0);
     }
 
+    public void IncreasePlayerKills()
+    {
+        this.PlayerGameState.PlayerKills += 1;
+        HUD.UpdatePKs(this.PlayerGameState);
+    }
+
     /// <summary>
     /// Invoked by the spaceship (observable) to update the current HP of the ship
     /// </summary>

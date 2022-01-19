@@ -17,6 +17,20 @@ namespace Networking
         public bool inMatch;
         public bool gameWon = false;
 
+        private SortedSet<int> indices = new SortedSet<int>() {
+                                1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25};
+
+        public int getAndRemoveNextFreeIndex(){
+            int nextIndex = indices.Min;
+            indices.Remove(indices.Min);
+            return nextIndex;
+        }
+
+        public void addIndex(int index)
+        {
+            indices.Add(index);
+        }
+
         public void AddPlayer(Player player)
         {
             players.Add(player);
@@ -84,7 +98,7 @@ namespace Networking
                 player.matchID = matchID;
                 this.LogLog ($"Match generated");
                 this.LogLog($"Match: {matchID} added");
-                playerIndex = 1;
+                playerIndex = getMatch(matchID).getAndRemoveNextFreeIndex();
                 player.playerIndex = playerIndex;
                 return true;
             }
@@ -108,8 +122,9 @@ namespace Networking
                         // player.currentMatch = matches[i];
                         player.matchID = matchID;
                         this.LogLog($"Player {player.playerName} joined match {matchID}");
-                        playerIndex = matches[i].GetPlayers().Count;
-                        player.playerIndex = playerIndex;
+                        //playerIndex = matches[i].GetPlayers().Count;
+                        //player.playerIndex = playerIndex;
+                        player.playerIndex = matches[i].getAndRemoveNextFreeIndex();
                         matches[i].players[0].PlayerCountUpdated (matches[i].players.Count);
                         if (matches[i].players.Count == maxMatchPlayers) {
                                 matches[i].matchFull = true;
@@ -142,7 +157,11 @@ namespace Networking
             for (int i = 0; i < matches.Count; i++) {
                 if (matches[i].matchID == _matchID) {
                     int playerIndex = matches[i].players.IndexOf (player);
-                    if (matches[i].players.Count > playerIndex) matches[i].players.RemoveAt (playerIndex);
+                    if (matches[i].players.Count > playerIndex)
+                    {
+                        matches[i].players.RemoveAt (playerIndex);
+                        matches[i].addIndex(player.playerIndex); // make this index available again
+                    }
                     this.LogLog ($"Player disconnected from match {_matchID} | {matches[i].players.Count} players remaining");
 
                     if (matches[i].players.Count == 0) {
