@@ -2,6 +2,7 @@ using Networking;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Networking;
 
 /// <summary>
 /// Script is attached to attack asteroids. It carries the source ID of the attack asteroid, and reports back to the server when the asteroid is destroyed.
@@ -18,8 +19,8 @@ public class AttackAsteroidSource : MonoBehaviour
         if (collision.gameObject.tag.Equals("Spaceship"))
         {
             Debug.Log("Attack Asteroid hit from player ID " + this.SourcePlayerID);
-            //TODO
-            //Player.localPlayer.UpdateHitCount(this.SourcePlayerID);
+            //TODO report back to server via command
+            Player.localPlayer.AttackAsteroidKilledPlayer(this.SourcePlayerID);
         }
     }
 }

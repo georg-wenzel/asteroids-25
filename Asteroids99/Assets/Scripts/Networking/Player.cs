@@ -119,6 +119,8 @@ namespace Networking
             StartCoroutine(helper.LoadSceneEnumerator("OnlineGameScene"));
             UILobby.instance.startSuccess();
             this.LogLog("Loaded Game");
+            // Turn off Backgroundmusic
+            GameObject.Find("BackgroundMusic").SetActive(false);
         }
 
         [TargetRpc]
@@ -146,6 +148,12 @@ namespace Networking
         {
             this.LogLog("Enemy spawned an AttackAsteroid on this player");
             GameObject.Find("AsteroidManager").GetComponent<AsteroidSpawner>().SpawnAttackAsteroid(sourceId);
+        }
+
+        [TargetRpc]
+        public void IncreasePlayerKills()
+        {
+            GameObject.Find("GameStateManager").GetComponent<SinglePlayerGameState>().IncreasePlayerKills();
         }
 
         #endregion executedByServer
@@ -215,6 +223,19 @@ namespace Networking
                         // get player data with MatchMaker.instance.getMatch(matchID).players
                         // iterate over the above list and call player.playerName and player.gameState.score
                     }
+                }
+            }
+        }
+
+        [Command]
+        public void AttackAsteroidKilledPlayer(int SourcePlayerID)
+        {
+            foreach(Player pl in MatchMaker.instance.getMatch(matchID).players)
+            {
+                if (pl.playerIndex == SourcePlayerID)
+                {
+                    pl.IncreasePlayerKills();
+                    break;
                 }
             }
         }
