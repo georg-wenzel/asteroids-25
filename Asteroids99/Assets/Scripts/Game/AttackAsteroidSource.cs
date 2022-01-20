@@ -1,3 +1,4 @@
+using Networking;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,8 +18,8 @@ public class AttackAsteroidSource : MonoBehaviour
         if (collision.gameObject.tag.Equals("Spaceship"))
         {
             Debug.Log("Attack Asteroid hit from player ID " + this.SourcePlayerID);
-            //TODO report back to server via command
-            //ex. Player.UpdateHitCount(this.SourcePlayerID)
+            //TODO
+            //Player.localPlayer.UpdateHitCount(this.SourcePlayerID);
         }
     }
 }
