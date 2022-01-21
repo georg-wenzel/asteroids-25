@@ -12,6 +12,7 @@ public static class APIHelper
         LeaderboardEntries myObject = null;
         try{
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://rest-api-asteroids99-dev.eu-central-1.elasticbeanstalk.com/api/scores");
+            request.Timeout = 5000;
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             StreamReader reader = new StreamReader(response.GetResponseStream());
             string json = reader.ReadToEnd();

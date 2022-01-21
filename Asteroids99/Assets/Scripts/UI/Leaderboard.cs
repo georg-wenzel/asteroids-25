@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using TMPro;
+using System.Threading;
 
 [System.Serializable]
 public class Leaderboard : MonoBehaviour
@@ -39,9 +40,7 @@ public class Leaderboard : MonoBehaviour
             item.GetComponent<LeaderboardItem>().username.text = "request ";
             item.GetComponent<LeaderboardItem>().score.text = "failed!";
         }
-        
     }
-
     public void ReturnToMainMenu()
     {
         // Load some Scene
