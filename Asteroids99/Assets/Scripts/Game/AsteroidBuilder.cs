@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 /// <summary>
 /// A script which offers a public interface for building Asteroids in a builder-pattern like design.
@@ -19,6 +20,7 @@ public class AsteroidBuilder : MonoBehaviour
     private bool isFriendly;
     private Vector2 initialSpawn;
     private Vector2 targetDirection;
+    private bool addAttackedSound;
     #endregion
 
     #region properties
@@ -31,6 +33,13 @@ public class AsteroidBuilder : MonoBehaviour
     /// The Game Boundaries
     /// </summary>
     public GameBoundaries GameView;
+
+    /// <summary>
+    /// The sound an attack asteroid plays when it enters the enemy field
+    /// </summary>
+    public AudioClip AttackAsteroidSound;
+
+    public AudioMixerGroup mixerGroup;
     #endregion
 
     #region methods
@@ -49,6 +58,7 @@ public class AsteroidBuilder : MonoBehaviour
         initialScale = 1;
         initialSpeed = 1;
         isFriendly = false;
+        addAttackedSound = false;
         color = new Color(1, 1, 1, 1);
 
         //==================== SPAWN THE METEOR OUTSIDE THE ARENA, TOWARDS A TARGET POINT INSIDE OF IT ====================
@@ -105,6 +115,13 @@ public class AsteroidBuilder : MonoBehaviour
             //Friendly asteroid collision layer
             go.layer = 10;
         }
+        if(addAttackedSound)
+        {
+            AudioSource sound = go.AddComponent<AudioSource>();
+            sound.clip = AttackAsteroidSound;
+            sound.outputAudioMixerGroup = mixerGroup;
+            sound.Play();
+        }
 
         props.GetComponent<SpriteRenderer>().color = color;
         return go;
@@ -128,6 +145,7 @@ public class AsteroidBuilder : MonoBehaviour
         initialSpeed *= 2f;
         scriptsToAttach.Add("AttackAsteroidBehaviour");
         scriptsToAttach.Add("AttackAsteroidSource");
+        addAttackedSound = true;
     }
 
     /// <summary>

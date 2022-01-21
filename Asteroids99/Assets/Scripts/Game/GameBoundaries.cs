@@ -59,7 +59,7 @@ public class GameBoundaries : MonoBehaviour
     #endregion
 
     #region methods
-    public void Start()
+    public void Awake()
     {
         //Calculate the border coordinates
         RightBorder = rightCollider.bounds.center.x - rightCollider.bounds.extents.x;

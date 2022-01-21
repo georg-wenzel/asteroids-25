@@ -6,14 +6,21 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// Script for controlling Spaceship Movement
 /// </summary>
-public class SpaceshipMovement : MonoBehaviour
+public class SpaceshipMovement : MonoBehaviour, ISpaceshipMovementObservable
 {
     #region fields
     /// <summary>
     /// The current velocity of the spaceship (in screen dimensions)
     /// </summary>
     private Vector2 velocity;
+    /// <summary>
+    /// The current player's input
+    /// </summary>
     private PlayerInput input;
+    /// <summary>
+    /// The current list of spaceship movement observers
+    /// </summary>
+    private List<ISpaceshipMovementObserver> observers;
     #endregion
 
     #region properties
@@ -32,6 +39,11 @@ public class SpaceshipMovement : MonoBehaviour
     #endregion
 
     #region methods
+    void Awake()
+    {
+        observers = new List<ISpaceshipMovementObserver>();
+    }
+
     void Start()
     {
         //set the initial velocity to 0
@@ -55,9 +67,29 @@ public class SpaceshipMovement : MonoBehaviour
 
         //update the velocity, clamping it to a maximum magnitude (max speed is the same in multiple dimensions as in one)
         this.velocity = Vector2.ClampMagnitude(this.velocity + movementVector * translationSpeed * 0.025f, 0.75f);
+        if (this.velocity.magnitude > 0.0f) notifyAll();
         //apply this frame's rotation and translation.
         transform.Rotate(new Vector3(0, 0, rotationDegrees * rotationSpeed));
         transform.Translate(velocity, Space.World);
+    }
+
+    public void register(ISpaceshipMovementObserver observer)
+    {
+        observers.Add(observer);
+    }
+
+    public void unregister(ISpaceshipMovementObserver observer)
+    {
+        observers.Remove(observer);
+    }
+
+    public void notifyAll()
+    {
+        foreach (ISpaceshipMovementObserver o in observers)
+        {
+            o.PublishSpaceshipMovement(this.velocity);
+
+        }
     }
     #endregion
 }
