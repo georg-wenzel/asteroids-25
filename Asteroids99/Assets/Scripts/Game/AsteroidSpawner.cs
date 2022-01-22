@@ -101,8 +101,8 @@ public class AsteroidSpawner : MonoBehaviour, IAsteroidDeathObserver
         //If it was a large asteroid
         if(asteroid.transform.localScale.x > 1)
         {
-            //1 in 3 chance to spawn an attack asteroid
-            if(Random.Range(0,3) == 0)
+            // always spawn attack asteroids 
+            if(true)
             {
                 //build and spawn a friendly asteroid aiming towards the missile impact direction
                 builder.Reset();
