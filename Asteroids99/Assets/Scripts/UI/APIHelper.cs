@@ -1,29 +1,39 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Net;
 using System.IO;
 using System.Linq;
+using UnityEngine.Networking;
 
-public static class APIHelper
+public class APIHelper
 {
-    public static LeaderboardEntries GetLeaderboard()
+    private const string API_URL = "http://rest-api-asteroids99-dev.eu-central-1.elasticbeanstalk.com/api/scores";
+
+    private IEnumerator CallAPI(string url, Action<string> callback)
     {
-        LeaderboardEntries myObject = null;
-        try{
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://rest-api-asteroids99-dev.eu-central-1.elasticbeanstalk.com/api/scores");
-            request.Timeout = 5000;
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            StreamReader reader = new StreamReader(response.GetResponseStream());
-            string json = reader.ReadToEnd();
-            Debug.Log(json);
-            myObject = JsonUtility.FromJson<LeaderboardEntries>("{\"entries\":" + json + "}");
-            //sortieren nach Score
-            myObject.entries = myObject.entries.OrderByDescending(c => c.score).ToArray();
+        using (UnityWebRequest request = UnityWebRequest.Get(url))
+        {
+            yield return request.Send();
+
+            if (request.isNetworkError)
+            {
+                Debug.LogError("Network Problem: " + request.error);
+            }
+            else if (request.responseCode != (long) System.Net.HttpStatusCode.OK)
+            {
+                Debug.LogError("Response Error: " + request.responseCode);
+            }
+            else
+            {
+                callback(request.downloadHandler.text);
+            }
         }
-        catch(WebException e){
-            Debug.Log("Server request failed: "+e.Message);
-        }
-        return myObject;
+    }
+
+    public IEnumerator GetLeaderboard(Action<string> callback)
+    {
+        return CallAPI(API_URL, callback);
     }
 }
