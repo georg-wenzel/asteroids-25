@@ -16,6 +16,13 @@ public class GameHUD : MonoBehaviour
     [SerializeField] Sprite hp_1Life;
     [SerializeField] TMP_Text scoreText;
     [SerializeField] TMP_Text PKsText;
+    [SerializeField] TMP_Text PlacementText;
+
+
+    public void UpdatePlacement(int amountActivePlayers)
+    {
+        PlacementText.text = amountActivePlayers.ToString();
+    }
 
     public void UpdateHP(GameState gameState)
     {

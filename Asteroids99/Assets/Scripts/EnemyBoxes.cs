@@ -18,7 +18,7 @@ public class EnemyBoxes : MonoBehaviour
         List<GameState> gameStates = new List<GameState>();
         List<string> playerNames = new List<string>();
         List<int> playerIndices = new List<int>();
-        for(int i=0; i<25; i++)
+        for(int i=1; i<26; i++)
         {
             gameStates.Add(new GameState(false, 3, 0));
             playerNames.Add("Player " + i);
@@ -59,8 +59,7 @@ public class EnemyBoxes : MonoBehaviour
         for(int i=0; i<transform.childCount; i++)
         {
             EnemySquare es = (EnemySquare)transform.GetChild(i).GetComponent(typeof(EnemySquare));
-            if(!es.isGameOver)
-                allEnemySquares.Add(es);
+            allEnemySquares.Add(es);
         }
 
         /* get 2 neighbours
