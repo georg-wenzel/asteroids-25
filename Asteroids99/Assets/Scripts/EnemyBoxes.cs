@@ -89,9 +89,9 @@ public class EnemyBoxes : MonoBehaviour
         else
         {
             nextNeighbour = allEnemySquares[currentSquareIndex+1];
-            if(nextNeighbour.isGameOver)
-                return getNextEnemenySquare(currentSquareIndex+1, allEnemySquares);
         }
+        if(nextNeighbour.isGameOver)
+                return getNextEnemenySquare(currentSquareIndex+1, allEnemySquares);
         return nextNeighbour;
     }
 
@@ -103,9 +103,9 @@ public class EnemyBoxes : MonoBehaviour
         else
         {
             prevNeighbour = allEnemySquares[currentSquareIndex-1];
-            if(prevNeighbour.isGameOver)
-                return getPrevEnemenySquare(currentSquareIndex-1, allEnemySquares);
         }
+        if(prevNeighbour.isGameOver)
+                return getPrevEnemenySquare(currentSquareIndex-1, allEnemySquares);
         return prevNeighbour;
     }
 
