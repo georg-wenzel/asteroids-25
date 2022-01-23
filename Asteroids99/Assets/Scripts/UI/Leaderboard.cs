@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using TMPro;
 using System.Threading;
+using Newtonsoft.Json;
 using Utils;
-
 [System.Serializable]
 public class Leaderboard : MonoBehaviour
 {
@@ -54,7 +54,7 @@ public class Leaderboard : MonoBehaviour
                 item.GetComponent<LeaderboardItem>().placement.text = entries.entries[i].placement.ToString();
                 item.GetComponent<LeaderboardItem>().username.text = entries.entries[i].nickname;
                 item.GetComponent<LeaderboardItem>().score.text = entries.entries[i].score.ToString();
-                item.GetComponent<LeaderboardItem>().hits.text = entries.entries[i].destroyed_enemies.ToString();
+                item.GetComponent<LeaderboardItem>().hits.text = entries.entries[i].hits.ToString();
                 max_count++;
             }
         } else {
@@ -73,8 +73,13 @@ public class Leaderboard : MonoBehaviour
     public void PostScore()
     {
         this.LogLog("Posting Score to server");
+        LeaderboardEntry entry = new LeaderboardEntry();
+        entry.nickname = "postTest2";
+        entry.placement = 1;
+        entry.score = 66666;
+        entry.hits = 1;
         APIHelper _helper = new APIHelper();
-        string data = @"{" + @"""nickname"": ""Fabian""," + @"""score"": 1397," + @"""destroyed_enemies"": 19" + @"}";        
+        var data = JsonConvert.SerializeObject(entry, Formatting.Indented);
         Debug.Log(data);
         StartCoroutine(_helper.PostScore(OnScorePosted, data));
     }

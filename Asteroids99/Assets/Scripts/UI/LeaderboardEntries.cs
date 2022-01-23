@@ -1,3 +1,5 @@
+using UnityEngine.Serialization;
+
 [System.Serializable]
 public class LeaderboardEntry
 {
@@ -5,7 +7,7 @@ public class LeaderboardEntry
     public string nickname;
     public int placement;
     public int score;
-    public int destroyed_enemies;
+    public int hits;
 }
 
 [System.Serializable]
