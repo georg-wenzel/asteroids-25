@@ -124,10 +124,11 @@ namespace Networking
         }
 
         [TargetRpc]
-        public void UpdateGUIOnClients(List<GameState> enemyGameStates, List<string> enemyNames, List<int> playerIndices)
+        public void UpdateGUIOnClients(List<GameState> enemyGameStates, List<string> enemyNames, List<int> playerIndices, int amountActivePlayers)
         {
             // PrintClientDataOfMatch();
             GameObject.Find("EnemyBoxes").GetComponent<EnemyBoxes>().UpdateEnemySquares(enemyGameStates, enemyNames, playerIndices);
+            GameObject.Find("HUD").GetComponent<GameHUD>().UpdatePlacement(amountActivePlayers);
             bool allEnemiesGameOver = true;
             foreach(GameState gs in enemyGameStates)
             {
@@ -190,11 +191,14 @@ namespace Networking
                     List<GameState> gameStates = new List<GameState>();
                     List<string> playerNames = new List<string>();
                     List<int> playerIndices = new List<int>();
+                    int amountActivePlayers = 0;
                     foreach (Player p in MatchMaker.instance.getMatch(matchID).players)
                     {
                         gameStates.Add(p.gameState);
                         playerNames.Add(p.playerName);
                         playerIndices.Add(p.playerIndex);
+                        if(!p.gameState.GameOver)
+                            amountActivePlayers += 1;
                     }
 
                     for (int i = MatchMaker.instance.getMatch(matchID).players.Count; i < 25; i++)
@@ -208,7 +212,7 @@ namespace Networking
                     var index = playerNames.IndexOf(pl.playerName);
                     playerNames.RemoveAt(index);
                     playerIndices.Remove(pl.playerIndex);
-                    pl.UpdateGUIOnClients(gameStates, playerNames, playerIndices);
+                    pl.UpdateGUIOnClients(gameStates, playerNames, playerIndices, amountActivePlayers);
 
                     bool allGameOver = true;
                     foreach(GameState gs in gameStates)

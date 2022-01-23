@@ -984,6 +984,7 @@ MonoBehaviour:
   hp_1Life: {fileID: 21300000, guid: f20a79ee83797a94193ad4a8be0201fb, type: 3}
   scoreText: {fileID: 251199045486433177}
   PKsText: {fileID: 4597468375383721237}
+  PlacementText: {fileID: 251199045524386082}
 --- !u!1 &251199045335608671
 GameObject:
   m_ObjectHideFlags: 0
@@ -1226,10 +1227,10 @@ RectTransform:
   m_Father: {fileID: 251199043583330092}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.27600002}
-  m_AnchorMax: {x: 1, y: 0.72400004}
-  m_AnchoredPosition: {x: 0.0000076293945, y: 0.000015258789}
-  m_SizeDelta: {x: -0.000068665, y: 0}
+  m_AnchorMin: {x: 0, y: 0.22260964}
+  m_AnchorMax: {x: 1, y: 0.76669526}
+  m_AnchoredPosition: {x: -0.000049591064, y: 0.47200012}
+  m_SizeDelta: {x: -0.0001, y: -0.32589912}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &251199045524386083
 CanvasRenderer:
@@ -1259,7 +1260,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1/25
+  m_text: '25
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 265e54d831969f149ad081b6834c425a, type: 2}
   m_sharedMaterial: {fileID: 2079453116899809658, guid: 265e54d831969f149ad081b6834c425a, type: 2}
@@ -1286,7 +1289,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34.05
+  m_fontSize: 41.1
   m_fontSizeBase: 18
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1783,10 +1786,10 @@ RectTransform:
   m_Father: {fileID: 251199045675510790}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000061035, y: -8.8463}
-  m_SizeDelta: {x: 93, y: 17.693}
+  m_AnchorMin: {x: 0, y: 0.30800003}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: 0.124938965, y: 0.1534996}
+  m_SizeDelta: {x: -0.75, y: -0.3069992}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8685050959283169400
 CanvasRenderer:
