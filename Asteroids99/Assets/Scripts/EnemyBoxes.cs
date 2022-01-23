@@ -50,6 +50,8 @@ public class EnemyBoxes : MonoBehaviour
             return;
         }
         EnemySquare destination = GetRandomNeighbourSquare(sourceSquare);
+        if (destination == null)
+            return;
         Player.localPlayer.SpawnAttackAsteroid(destination.playerIndex);
     }
 
@@ -77,12 +79,16 @@ public class EnemyBoxes : MonoBehaviour
         else
             selectedNeighbour = neighbour_2;
         
+        if(selectedNeighbour == null)
+            return null;
         Debug.Log(enemySquare.gameObject.name + " " + selectedNeighbour.gameObject.name);
         return selectedNeighbour;
     }
 
-    private EnemySquare getNextEnemenySquare(int currentSquareIndex, List<EnemySquare> allEnemySquares)
+    private EnemySquare getNextEnemenySquare(int currentSquareIndex, List<EnemySquare> allEnemySquares, int tries = 0)
     {
+        if(tries > 24)
+            return null;
         EnemySquare nextNeighbour;
         if (currentSquareIndex == 23)
             nextNeighbour = allEnemySquares[0];
@@ -91,12 +97,14 @@ public class EnemyBoxes : MonoBehaviour
             nextNeighbour = allEnemySquares[currentSquareIndex+1];
         }
         if(nextNeighbour.isGameOver)
-                return getNextEnemenySquare(currentSquareIndex+1, allEnemySquares);
+                return getNextEnemenySquare(currentSquareIndex+1, allEnemySquares, tries+1);
         return nextNeighbour;
     }
 
-    private EnemySquare getPrevEnemenySquare(int currentSquareIndex, List<EnemySquare> allEnemySquares)
+    private EnemySquare getPrevEnemenySquare(int currentSquareIndex, List<EnemySquare> allEnemySquares, int tries = 0)
     {
+        if(tries > 24)
+            return null;
         EnemySquare prevNeighbour;
         if (currentSquareIndex == 0)
             prevNeighbour = allEnemySquares[23];
@@ -105,7 +113,7 @@ public class EnemyBoxes : MonoBehaviour
             prevNeighbour = allEnemySquares[currentSquareIndex-1];
         }
         if(prevNeighbour.isGameOver)
-                return getPrevEnemenySquare(currentSquareIndex-1, allEnemySquares);
+                return getPrevEnemenySquare(currentSquareIndex-1, allEnemySquares, tries+1);
         return prevNeighbour;
     }
 
