@@ -32,8 +32,36 @@ public class APIHelper
         }
     }
 
+    private IEnumerator PostAPI(string url, Action<string> callback, string data)
+    {
+        using (UnityWebRequest request = UnityWebRequest.Post(url, data))
+        {
+            request.SetRequestHeader ("Content-Type", "application/json");
+
+            yield return request.Send();
+
+            if (request.isNetworkError)
+            {
+                Debug.LogError("Network Problem: " + request.error);
+            }
+            else if (request.responseCode != (long) System.Net.HttpStatusCode.OK)
+            {
+                Debug.LogError("Response Error: " + request.responseCode);
+            }
+            else
+            {
+                callback(request.downloadHandler.text);
+            }
+        }
+    }
+
     public IEnumerator GetLeaderboard(Action<string> callback)
     {
         return CallAPI(API_URL, callback);
+    }
+
+    public IEnumerator PostScore(Action<string> callback, string data)
+    {
+        return PostAPI(API_URL, callback, data);
     }
 }

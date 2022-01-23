@@ -47,13 +47,14 @@ public class Leaderboard : MonoBehaviour
             for (int i = 0; i < entries.entries.Length; i++)
             {
                 //Nach 10 Einträgen abbrechen
-                if(max_count == 10){
+                if(max_count == 11){
                     break;
                 }
                 GameObject item = Instantiate(LeaderboardItemPrefab, LeaderboardHolder);
-                item.GetComponent<LeaderboardItem>().placement.text = entries.entries[i].placement;
+                item.GetComponent<LeaderboardItem>().placement.text = entries.entries[i].placement.ToString();
                 item.GetComponent<LeaderboardItem>().username.text = entries.entries[i].nickname;
-                item.GetComponent<LeaderboardItem>().score.text = entries.entries[i].score;
+                item.GetComponent<LeaderboardItem>().score.text = entries.entries[i].score.ToString();
+                item.GetComponent<LeaderboardItem>().hits.text = entries.entries[i].destroyed_enemies.ToString();
                 max_count++;
             }
         } else {
@@ -61,9 +62,22 @@ public class Leaderboard : MonoBehaviour
             item.GetComponent<LeaderboardItem>().placement.text = "Server ";
             item.GetComponent<LeaderboardItem>().username.text = "request ";
             item.GetComponent<LeaderboardItem>().score.text = "failed!";
+            item.GetComponent<LeaderboardItem>().hits.text = "";
         }
     }
 
+    public void OnScorePosted(string data)
+    {
+        Debug.Log(data);
+    }
+    public void PostScore()
+    {
+        this.LogLog("Posting Score to server");
+        APIHelper _helper = new APIHelper();
+        string data = @"{" + @"""nickname"": ""Fabian""," + @"""score"": 1397," + @"""destroyed_enemies"": 19" + @"}";        
+        Debug.Log(data);
+        StartCoroutine(_helper.PostScore(OnScorePosted, data));
+    }
     // Update is called once per frame
     void Update()
     {
