@@ -29,6 +29,7 @@ public class SinglePlayerGameState : MonoBehaviour, IHPObserver, IAsteroidDeathO
         PlayerSpaceship.GetComponent<SpaceshipHealthManager>().register(this);
         //Initialize a new player state with default values
         PlayerGameState = new GameState(false, 3, 0);
+        Player.localPlayer.SetGameState(this.PlayerGameState);
     }
 
     public void IncreasePlayerKills()
