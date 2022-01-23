@@ -62,6 +62,14 @@ public class EnemySquare : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if(Player.localPlayer.gameState.GameOver)
+        {
+            if(other.gameObject.tag.Equals("FriendlyAsteroid"))
+            {
+                Destroy(other.gameObject);
+                return;
+            }
+        }
         if(other.gameObject.tag.Equals("FriendlyAsteroid"))
         {
             EnemyBoxes eb = (EnemyBoxes)enemyBoxes.GetComponent(typeof(EnemyBoxes));
