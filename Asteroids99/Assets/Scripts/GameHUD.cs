@@ -8,6 +8,7 @@ using TMPro;
 using Newtonsoft.Json;
 using Utils;
 using System.Linq;
+using Networking;
 
 public class GameHUD : MonoBehaviour
 {
@@ -79,14 +80,15 @@ public class GameHUD : MonoBehaviour
 
     public void OnScorePosted(string data)
     {
-        Debug.Log(data);
+        //Debug.Log(data);
+        GameObject.Find("MultiplayerUI").GetComponent<MultiplayerUI>().goToMainMenu();
     }
 
     public void SaveScore()
     {
         this.LogLog("Saving Score to server");
         LeaderboardEntry entry = new LeaderboardEntry();
-        entry.nickname = "testName";
+        entry.nickname = Player.localPlayer.playerName;
         entry.placement = int.Parse(PlacementText.text);
         entry.score = int.Parse(scoreText.text);
         entry.destroyed_enemies = int.Parse(PKsText.text);

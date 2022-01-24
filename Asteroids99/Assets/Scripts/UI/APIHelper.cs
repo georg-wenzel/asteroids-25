@@ -27,7 +27,7 @@ public class APIHelper
             {
                 Debug.LogError("Network Problem: " + request.error);
             }
-            else if (request.responseCode != (long) System.Net.HttpStatusCode.OK)
+            else if (request.responseCode != (long) System.Net.HttpStatusCode.OK && request.responseCode != (long) System.Net.HttpStatusCode.Created)
             {
                 Debug.LogError("Response Error: " + request.responseCode);
             }
