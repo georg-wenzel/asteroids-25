@@ -54,7 +54,7 @@ public class Leaderboard : MonoBehaviour
                 item.GetComponent<LeaderboardItem>().placement.text = entries.entries[i].placement.ToString();
                 item.GetComponent<LeaderboardItem>().username.text = entries.entries[i].nickname;
                 item.GetComponent<LeaderboardItem>().score.text = entries.entries[i].score.ToString();
-                item.GetComponent<LeaderboardItem>().hits.text = entries.entries[i].hits.ToString();
+                item.GetComponent<LeaderboardItem>().hits.text = entries.entries[i].destroyed_enemies.ToString();
                 max_count++;
             }
         } else {
@@ -77,7 +77,7 @@ public class Leaderboard : MonoBehaviour
         entry.nickname = "postTest2";
         entry.placement = 1;
         entry.score = 66666;
-        entry.hits = 1;
+        entry.destroyed_enemies = 1;
         APIHelper _helper = new APIHelper();
         var data = JsonConvert.SerializeObject(entry, Formatting.Indented);
         Debug.Log(data);

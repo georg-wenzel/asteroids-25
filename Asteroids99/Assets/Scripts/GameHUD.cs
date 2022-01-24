@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using Newtonsoft.Json;
+using Utils;
+using System.Linq;
 
 public class GameHUD : MonoBehaviour
 {
@@ -72,6 +75,25 @@ public class GameHUD : MonoBehaviour
     {
         //SceneManager.LoadScene("MainMenu");
         GameObject.Find("MultiplayerUI").GetComponent<MultiplayerUI>().goToMainMenu();
+    }
+
+    public void OnScorePosted(string data)
+    {
+        Debug.Log(data);
+    }
+
+    public void SaveScore()
+    {
+        this.LogLog("Saving Score to server");
+        LeaderboardEntry entry = new LeaderboardEntry();
+        entry.nickname = "testName";
+        entry.placement = int.Parse(PlacementText.text);
+        entry.score = int.Parse(scoreText.text);
+        entry.destroyed_enemies = int.Parse(PKsText.text);
+        APIHelper _helper = new APIHelper();
+        var data = JsonConvert.SerializeObject(entry, Formatting.Indented);
+        Debug.Log(data);
+        StartCoroutine(_helper.PostScore(OnScorePosted, data));
     }
 
 }

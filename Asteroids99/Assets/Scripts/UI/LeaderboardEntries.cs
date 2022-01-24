@@ -7,7 +7,7 @@ public class LeaderboardEntry
     public string nickname;
     public int placement;
     public int score;
-    public int hits;
+    public int destroyed_enemies;
 }
 
 [System.Serializable]
